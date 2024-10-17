@@ -2,13 +2,16 @@ import { StyleSheet, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
 import Header from "@/components/Header";
+import InputText from "@/components/InputText";
 
 export default function Index() {
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#febe71', '#a95d00']} style={styles.background} />
       <Header name="Escola CMS" />
-      <Link href="/posts">Go to Posts Screen</Link>
+      <Text style={styles.text}>Insira seu usuário e sua senha abaixo para prosseguir:</Text>
+      <InputText placeholder="Insira aqui seu nome de usuário" isPassword={false} />
+      <InputText placeholder="Insira aqui sua senha" isPassword={true} />
     </View>
   );
 }
@@ -21,7 +24,12 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   text: {
-    color: "#fff"
+    color: "#fff",
+    fontSize: 20,
+    textAlign: "center",
+    fontWeight: "light",
+    marginBottom: 30,
+    paddingHorizontal: 50
   },
   background: {
     position: "absolute",
