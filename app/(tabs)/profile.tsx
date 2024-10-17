@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
+import GradientBackground from "@/components/GradientBackground";
 
 export default function Index() {
   return (
     <View style={styles.container}>
-      <LinearGradient colors={['#febe71', '#a95d00']} style={styles.background} />
+      <GradientBackground />
       <Text style={styles.text}>Profile Screen</Text>
       <Link href="/">
           Go back to Home screen!
@@ -23,12 +24,5 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#fff"
-  },
-  background: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0
   }
 })
