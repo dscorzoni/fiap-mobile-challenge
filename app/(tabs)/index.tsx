@@ -1,12 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
+import Header from "@/components/Header";
 
 export default function Index() {
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#febe71', '#a95d00']} style={styles.background} />
-      <Text style={styles.text}>Login Screen</Text>
+      <Header name="Escola CMS" />
       <Link href="/posts">Go to Posts Screen</Link>
     </View>
   );
