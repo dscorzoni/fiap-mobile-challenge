@@ -3,6 +3,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
 import Header from "@/components/Header";
 import InputText from "@/components/InputText";
+import Button from "@/components/Button";
 
 export default function Index() {
   return (
@@ -12,6 +13,9 @@ export default function Index() {
       <Text style={styles.text}>Insira seu usuário e sua senha abaixo para prosseguir:</Text>
       <InputText placeholder="Insira aqui seu nome de usuário" isPassword={false} />
       <InputText placeholder="Insira aqui sua senha" isPassword={true} />
+      <View style={{margin: 20}} />
+      <Button title="Login" styleType="primary" />
+      <Button title="Novo Usuário" styleType="secondary" />
     </View>
   );
 }

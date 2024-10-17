@@ -21,7 +21,7 @@ export default function InputText({value, placeholder, onChangeText, isPassword}
 
 const styles = StyleSheet.create({
   inputText: {
-    backgroundColor: "#ffffff52",
+    backgroundColor: "#ffffffe9",
     paddingHorizontal: 20,
     paddingVertical: 10,
     marginTop: 10,
