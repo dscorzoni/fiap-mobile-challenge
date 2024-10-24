@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/Colors";
 import { View, TextInput, StyleSheet } from "react-native";
 
 interface Props {
@@ -21,14 +22,15 @@ export default function InputText({value, placeholder, onChange, isPassword} : P
 
 const styles = StyleSheet.create({
   inputText: {
-    backgroundColor: "#fff",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    backgroundColor: Colors.lightGrey,
+    paddingVertical: 12,
     marginTop: 10,
-    width: "85%",
+    width: "90%",
     textAlign: "center",
-    fontSize: 18,
-    fontWeight: "bold",
-    borderRadius: 10
+    fontSize: 16,
+    // borderTopLeftRadius: 10,
+    // borderTopRightRadius: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.darkGrey
   }
 })

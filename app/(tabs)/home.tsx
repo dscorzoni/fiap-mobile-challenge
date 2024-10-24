@@ -1,10 +1,8 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import Header from "@/components/Header";
-import InputText from "@/components/InputText";
 import Button from "@/components/Button";
-import GradientBackground from "@/components/GradientBackground";
-import { useState } from "react";
 import { Colors } from "@/constants/Colors";
+import { router } from "expo-router";
 
 export default function Home() {
 
@@ -12,6 +10,7 @@ export default function Home() {
     <View style={styles.container}>
       <Header name="Home" />
       <Text style={styles.text}>Home Screen</Text>
+      <Button title="Back to Login" icon="log-in" styleType="primary" onPress={ () => router.replace("/") } />
     </View>
   );
 }

@@ -6,17 +6,17 @@ import Button from "@/components/Button";
 import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function Login() {
+export default function Index() {
 
   return (
     <View style={styles.container}>
-      <StatusBar />
+      <StatusBar style="dark" />
       <Header name="Escola CMS" />
       <View>
         <Ionicons name="document-text-outline" size={150} style={styles.icon} />
       </View>
-      <Button title="Login" icon="log-in" styleType="primary" onPress={ () => router.replace("/(tabs)") } />
-      <Button title="Registrar-se" icon="person-add" styleType="secondary" onPress={ () => router.replace("/(tabs)") } />
+      <Button title="Login" icon="log-in" styleType="primary" onPress={ () => router.push("/login") } />
+      <Button title="Registre-se" icon="person-add" styleType="secondary" onPress={ () => router.push("/register") } />
     </View>
   );
 }
