@@ -1,6 +1,5 @@
 import { Colors } from "@/constants/Colors"
 import { Ionicons } from "@expo/vector-icons"
-import { IconProps } from "@expo/vector-icons/build/createIconSet"
 import { Text, Pressable, StyleSheet } from "react-native"
 
 interface Props {

@@ -4,7 +4,6 @@ import InputText from "@/components/InputText";
 import Button from "@/components/Button";
 import GradientBackground from "@/components/GradientBackground";
 import { useState } from "react";
-import { Link } from "expo-router";
 import { Colors } from "@/constants/Colors";
 
 export default function Home() {

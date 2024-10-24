@@ -1,7 +1,4 @@
 import { StyleSheet, Text, View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { Link } from "expo-router";
-import GradientBackground from "@/components/GradientBackground";
 import Header from "@/components/Header";
 import { Colors } from "@/constants/Colors";
 
