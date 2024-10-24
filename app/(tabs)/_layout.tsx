@@ -1,14 +1,15 @@
 import { Tabs } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { StatusBar } from 'expo-status-bar';
+import { Colors } from '@/constants/Colors';
 
 export default function TabLayout() {
   return (
     <Tabs screenOptions={{
       headerShown: false,
-      tabBarActiveTintColor: '#ff8c00',
+      tabBarActiveTintColor: Colors.primary,
       tabBarStyle: {
-        backgroundColor: '#25292e',
+        backgroundColor: Colors.black,
         height: "12%",
         paddingBottom: 35,
         paddingTop: 20
@@ -29,15 +30,6 @@ export default function TabLayout() {
           title: 'Posts',
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'book' : 'book-outline'} color={color} size={24}/>
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: 'Perfil',
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'person' : 'person-outline'} color={color} size={24}/>
           ),
         }}
       />
