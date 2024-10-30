@@ -1,5 +1,6 @@
 import { Stack } from "expo-router";
 import { setStatusBarStyle, StatusBar } from "expo-status-bar";
+import React from "react";
 import { useEffect } from "react";
 
 export default function RootLayout() {
