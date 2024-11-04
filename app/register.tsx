@@ -8,7 +8,6 @@ import InputText from "@/components/InputText";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function Register() {
-
   return (
     <View style={styles.container}>
       <StatusBar style="dark" />
@@ -18,9 +17,13 @@ export default function Register() {
       <InputText isPassword={false} placeholder="Digite seu nome completo" />
       <InputText isPassword={true} placeholder="Digite sua senha" />
       <InputText isPassword={true} placeholder="Confirme sua senha" />
-      <View style={{ padding: 16 }}/>
-      <Button title={"Login"} styleType={"primary"} />
-      <Button title="Voltar" styleType="secondary" onPress={ () => router.replace("/") } />
+      <View style={{ padding: 16 }} />
+      <Button title="Cadastrar" styleType="primary" />
+      <Button
+        title="Voltar"
+        styleType="secondary"
+        onPress={() => router.push("/")}
+      />
     </View>
   );
 }
@@ -30,17 +33,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   icon: {
     color: Colors.primary,
     padding: 16,
-    marginBottom: 36
+    marginBottom: 36,
   },
   forgotPassword: {
     width: "85%",
     textAlign: "right",
     paddingTop: 16,
-    textDecorationLine: "underline"
-  }
-})
+    textDecorationLine: "underline",
+  },
+});

@@ -1,14 +1,28 @@
-import { Stack } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router, Stack } from "expo-router";
 import { setStatusBarStyle, StatusBar } from "expo-status-bar";
 import React from "react";
 import { useEffect } from "react";
 
 export default function RootLayout() {
   useEffect(() => {
+    const checkLoginStatus = async () => {
+      const token = await AsyncStorage.getItem("jwtToken");
+      if (!token) {
+        router.replace("/"); // Redireciona para a tela de login se o token não estiver presente
+      } else {
+        router.replace("/home");
+      }
+    };
+    checkLoginStatus();
+  }, []);
+
+  useEffect(() => {
     setTimeout(() => {
-      setStatusBarStyle('light');
+      setStatusBarStyle("light");
     });
   }, []);
+
   return (
     <>
       <Stack>
