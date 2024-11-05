@@ -1,18 +1,17 @@
 import { StyleSheet, Text, View } from "react-native";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import Header from "@/components/Header";
 import { Colors } from "@/constants/Colors";
 import Button from "@/components/Button";
 
 export default function PostDetail() {
+  const { postId } = useLocalSearchParams<{ postId: string }>();
+
   return (
     <View style={styles.container}>
-      <Header name="Post" />
+      <Header name={`Post ${postId}`} />
       <Text style={styles.text}>Detailed Post Screen</Text>
-      <Button
-        title="Go back"
-        onPress={() => router.push("/posts/list")}
-      ></Button>
+      <Button title="Go back" onPress={() => router.back()}></Button>
     </View>
   );
 }

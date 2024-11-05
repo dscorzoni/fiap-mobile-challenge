@@ -4,9 +4,9 @@ import { Colors } from "@/constants/Colors";
 import { useAuthContext } from "@/contexts/auth";
 
 export default function TabLayout() {
-  const { isAuthenticated, user } = useAuthContext();
+  const { isAuthenticated, isLoading, user } = useAuthContext();
 
-  if (!isAuthenticated) {
+  if (!isLoading && !isAuthenticated) {
     router.replace("/");
     return null;
   }

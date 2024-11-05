@@ -11,7 +11,7 @@ export default function PostsList() {
       <Text style={styles.text}>Posts Screen</Text>
       <Button
         title="View Post"
-        onPress={() => router.push("/posts/detail")}
+        onPress={() => router.push(`/posts/detail?postId=${12345}`)}
       ></Button>
     </View>
   );

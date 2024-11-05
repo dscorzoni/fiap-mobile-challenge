@@ -1,7 +1,7 @@
 import { Role, User } from "@/types";
 import { jwtDecode } from "jwt-decode";
 
-interface MyJWTPayload {
+interface JWTPayload {
   sub: string;
   email: string;
   username: string;
@@ -9,9 +9,9 @@ interface MyJWTPayload {
   exp: number; 
 }
 
-export const decodeJWT = (token: string): MyJWTPayload | null => {
+export const decodeJWT = (token: string): JWTPayload | null => {
   try {
-    const decoded = jwtDecode<MyJWTPayload>(token);
+    const decoded = jwtDecode<JWTPayload>(token);
     return decoded;
   } catch (error) {
     console.error("Failed to decode JWT:", error);
