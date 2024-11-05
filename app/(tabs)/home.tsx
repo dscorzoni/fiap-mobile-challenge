@@ -2,9 +2,11 @@ import { StyleSheet, Text, View } from "react-native";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
 import { Colors } from "@/constants/Colors";
-import { logout } from "@/api/auth/authService";
+import { useAuthContext } from "@/contexts/auth";
 
 export default function Home() {
+  const { onLogout } = useAuthContext();
+
   return (
     <View style={styles.container}>
       <Header name="Home" />
@@ -13,7 +15,7 @@ export default function Home() {
         title="Logout"
         icon="log-in"
         styleType="primary"
-        onPress={logout}
+        onPress={onLogout}
       />
     </View>
   );

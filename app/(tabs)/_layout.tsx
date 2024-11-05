@@ -1,44 +1,69 @@
-import { Tabs } from 'expo-router';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { Colors } from '@/constants/Colors';
+import { router, Tabs } from "expo-router";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { Colors } from "@/constants/Colors";
+import { useAuthContext } from "@/contexts/auth";
 
 export default function TabLayout() {
+  const { isAuthenticated, user } = useAuthContext();
+
+  if (!isAuthenticated) {
+    router.replace("/");
+    return null;
+  }
+
+  const adminProps = user?.role === "admin" ? {} : { href: null };
+
   return (
-    <Tabs screenOptions={{
-      headerShown: false,
-      tabBarActiveTintColor: Colors.primary,
-      tabBarStyle: {
-        backgroundColor: Colors.black,
-        height: "12%",
-        paddingBottom: 35,
-        paddingTop: 20
-      },
-    }}>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: Colors.primary,
+        tabBarStyle: {
+          backgroundColor: Colors.black,
+          height: "12%",
+          paddingBottom: 35,
+          paddingTop: 20,
+        },
+      }}
+    >
       <Tabs.Screen
         name="home"
         options={{
-          title: 'Home',
+          title: "Home",
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'home-sharp' : 'home-outline'} color={color} size={24} />
+            <Ionicons
+              name={focused ? "home-sharp" : "home-outline"}
+              color={color}
+              size={24}
+            />
           ),
         }}
       />
       <Tabs.Screen
         name="posts"
         options={{
-          title: 'Posts',
+          title: "Posts",
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'book' : 'book-outline'} color={color} size={24}/>
+            <Ionicons
+              name={focused ? "book" : "book-outline"}
+              color={color}
+              size={24}
+            />
           ),
         }}
       />
       <Tabs.Screen
         name="admin"
         options={{
-          title: 'Admin',
+          title: "Admin",
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'settings' : 'settings-outline'} color={color} size={24}/>
+            <Ionicons
+              name={focused ? "settings" : "settings-outline"}
+              color={color}
+              size={24}
+            />
           ),
+          ...adminProps,
         }}
       />
     </Tabs>
