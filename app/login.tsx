@@ -1,17 +1,20 @@
-import { StyleSheet, View, Text } from "react-native"
-import { Colors } from "@/constants/Colors"
-import Header from "@/components/Header"
-import Button from "@/components/Button"
-import { StatusBar } from "expo-status-bar"
-import InputText from "@/components/InputText"
-import { Ionicons } from "@expo/vector-icons"
-import { useState } from "react"
-import { handleLogin } from "./api/auth/authService"
+import { StyleSheet, View, Text } from "react-native";
+import { Colors } from "@/constants/Colors";
+import Header from "@/components/Header";
+import Button from "@/components/Button";
+import { StatusBar } from "expo-status-bar";
+import InputText from "@/components/InputText";
+import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
+import { router } from "expo-router";
+import { useAuthContext } from "@/contexts/auth";
 
 export default function Login() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { onLogin, isLoading } = useAuthContext();
+
   return (
     <View style={styles.container}>
       <StatusBar style="dark" />
@@ -30,9 +33,18 @@ export default function Login() {
         placeholder="Digite sua senha"
       />
       <Text style={styles.forgotPassword}>Esqueci minha senha</Text>
-      <View style={{ padding: 16 }}/>
-      <Button title="Login" styleType={"primary"} onPress={() => handleLogin(email, password)} />
-      <Button title="Voltar" styleType="secondary" />
+      <View style={{ padding: 16 }} />
+      <Button
+        title={isLoading ? "Entrando..." : "Entrar"}
+        onPress={() => onLogin(email, password)}
+        isDisabled={isLoading}
+      />
+      <Button
+        title="Voltar"
+        styleType="secondary"
+        onPress={() => router.push("/")}
+        isDisabled={isLoading}
+      />
     </View>
   );
 }
@@ -42,17 +54,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   icon: {
     color: Colors.primary,
     padding: 16,
-    marginBottom: 36
+    marginBottom: 36,
   },
   forgotPassword: {
     width: "85%",
     textAlign: "right",
     paddingTop: 16,
-    textDecorationLine: "underline"
-  }
-})
+    textDecorationLine: "underline",
+  },
+});

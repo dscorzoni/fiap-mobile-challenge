@@ -7,7 +7,6 @@ import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function Index() {
-
   return (
     <View style={styles.container}>
       <StatusBar style="dark" />
@@ -15,8 +14,17 @@ export default function Index() {
       <View>
         <Ionicons name="document-text-outline" size={150} style={styles.icon} />
       </View>
-      <Button title="Login" icon="log-in" styleType="primary" onPress={ () => router.push("/login") } />
-      <Button title="Registre-se" icon="person-add" styleType="secondary" onPress={ () => router.push("/register") } />
+      <Button
+        title="Entrar"
+        icon="log-in"
+        onPress={() => router.push("/login")}
+      />
+      <Button
+        title="Registre-se"
+        icon="person-add"
+        styleType="secondary"
+        onPress={() => router.push("/register")}
+      />
     </View>
   );
 }
@@ -26,14 +34,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   text: {
-    color: Colors.black
+    color: Colors.black,
   },
   icon: {
     color: Colors.primary,
     padding: 16,
-    marginBottom: 36
-  }
-})
+    marginBottom: 36,
+  },
+});
