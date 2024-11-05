@@ -1,3 +1,4 @@
+import { AuthContextProvider } from "@/contexts/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, Stack } from "expo-router";
 import { setStatusBarStyle, StatusBar } from "expo-status-bar";
@@ -24,7 +25,7 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <>
+    <AuthContextProvider>
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="login" options={{ headerShown: false }} />
@@ -33,6 +34,6 @@ export default function RootLayout() {
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="light" />
-    </>
+    </AuthContextProvider>
   );
 }
