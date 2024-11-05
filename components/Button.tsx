@@ -1,12 +1,19 @@
 import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
-import { Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ViewStyle,
+  TextStyle,
+} from "react-native";
 
 interface Props {
   title: string;
   styleType?: "primary" | "secondary";
   onPress?(): void;
   icon?: keyof typeof Ionicons.glyphMap;
+  isDisabled?: boolean;
 }
 
 export default function Button({
@@ -14,74 +21,90 @@ export default function Button({
   styleType = "primary",
   onPress,
   icon,
+  isDisabled = false,
 }: Props) {
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={
-        styleType === "secondary"
-          ? styles.buttonSecondary
-          : styles.buttonPrimary
-      }
+      style={getStyle("button", styleType, isDisabled)}
     >
       {icon ? (
-        <Ionicons
-          name={icon}
-          style={
-            styleType === "secondary"
-              ? styles.buttonTextSecondary
-              : styles.buttonTextPrimary
-          }
-        />
+        <Ionicons name={icon} style={getStyle("text", styleType, isDisabled)} />
       ) : (
         ""
       )}
-      <Text
-        style={
-          styleType === "secondary"
-            ? styles.buttonTextSecondary
-            : styles.buttonTextPrimary
-        }
-      >
-        {title}
-      </Text>
+      <Text style={getStyle("text", styleType, isDisabled)}>{title}</Text>
     </TouchableOpacity>
   );
 }
 
-const styles = StyleSheet.create({
+const getStyle = (
+  component: "button" | "text",
+  styleType: "primary" | "secondary",
+  isDisabled: boolean
+) => {
+  const disabled = isDisabled ? "Disabled" : "";
+  const styleName = `${component}${
+    styleType.charAt(0).toUpperCase() + styleType.slice(1)
+  }${disabled}`;
+  return styles[styleName];
+};
+
+interface Styles {
+  [key: string]: ViewStyle | TextStyle;
+}
+
+const baseButton: ViewStyle = {
+  flexDirection: "row",
+  gap: 12,
+  alignItems: "center",
+  justifyContent: "center",
+  paddingVertical: 16,
+  paddingHorizontal: 32,
+  width: "90%",
+  borderRadius: 5,
+};
+
+const baseText: TextStyle = {
+  fontSize: 18,
+  fontWeight: "bold",
+};
+
+const styles = StyleSheet.create<Styles>({
   buttonPrimary: {
-    flexDirection: "row",
-    gap: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 16,
-    paddingHorizontal: 32,
+    ...baseButton,
     backgroundColor: Colors.primary,
-    width: "90%",
     marginVertical: 5,
-    borderRadius: 5,
+  },
+  buttonPrimaryDisabled: {
+    ...baseButton,
+    backgroundColor: Colors.darkGrey,
+    marginVertical: 5,
   },
   buttonSecondary: {
-    flexDirection: "row",
-    gap: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 16,
-    paddingHorizontal: 32,
-    width: "90%",
-    borderWidth: 1,
+    ...baseButton,
     borderColor: Colors.primary,
-    borderRadius: 5,
+    borderWidth: 1,
   },
-  buttonTextPrimary: {
-    fontSize: 18,
+  buttonSecondaryDisabled: {
+    ...baseButton,
+    borderColor: Colors.darkGrey,
+    borderWidth: 1,
+  },
+  textPrimary: {
+    ...baseText,
     color: "#fff",
-    fontWeight: "bold",
   },
-  buttonTextSecondary: {
-    fontSize: 18,
-    fontWeight: "bold",
+  textPrimaryDisabled: {
+    ...baseText,
+    color: "#fff",
+  },
+  textSecondary: {
+    ...baseText,
     color: Colors.primary,
+  },
+  textSecondaryDisabled: {
+    ...baseText,
+    color: Colors.darkGrey,
   },
 });

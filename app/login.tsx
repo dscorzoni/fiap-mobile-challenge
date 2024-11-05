@@ -13,7 +13,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { onLogin } = useAuthContext();
+  const { onLogin, isLoading } = useAuthContext();
 
   return (
     <View style={styles.container}>
@@ -35,14 +35,15 @@ export default function Login() {
       <Text style={styles.forgotPassword}>Esqueci minha senha</Text>
       <View style={{ padding: 16 }} />
       <Button
-        title="Login"
-        styleType={"primary"}
+        title={isLoading ? "Entrando..." : "Entrar"}
         onPress={() => onLogin(email, password)}
+        isDisabled={isLoading}
       />
       <Button
         title="Voltar"
         styleType="secondary"
         onPress={() => router.push("/")}
+        isDisabled={isLoading}
       />
     </View>
   );

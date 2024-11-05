@@ -88,6 +88,6 @@ export async function handleLogin(email: string, password: string) {
   if (success) {
     router.push('/home')
   } else {
-    Alert.alert('Erro ao fazer login', 'Verifique suas credenciais.')
+    Alert.alert('Erro ao autenticar', 'Verifique suas credenciais.')
   }
 }

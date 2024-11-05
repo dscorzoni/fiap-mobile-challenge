@@ -5,17 +5,17 @@ import { Colors } from "@/constants/Colors";
 import { useAuthContext } from "@/contexts/auth";
 
 export default function Home() {
-  const { onLogout } = useAuthContext();
+  const { onLogout, isLoading } = useAuthContext();
 
   return (
     <View style={styles.container}>
       <Header name="Home" />
       <Text style={styles.text}>Home Screen</Text>
       <Button
-        title="Logout"
+        title={isLoading ? "Saindo..." : "Sair"}
         icon="log-in"
-        styleType="primary"
         onPress={onLogout}
+        isDisabled={isLoading}
       />
     </View>
   );
