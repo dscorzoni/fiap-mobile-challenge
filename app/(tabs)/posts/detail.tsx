@@ -4,14 +4,14 @@ import Header from "@/components/Header";
 import { Colors } from "@/constants/Colors";
 import Button from "@/components/Button";
 
-export default function Post() {
+export default function PostDetail() {
   return (
     <View style={styles.container}>
       <Header name="Post" />
       <Text style={styles.text}>Detailed Post Screen</Text>
       <Button
         title="Go back"
-        onPress={() => router.push("/posts/posts")}
+        onPress={() => router.push("/posts/list")}
       ></Button>
     </View>
   );
