@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from '../lib/axios'
-import { NavigationProp } from '@react-navigation/native'
 import { router } from 'expo-router'
 import { Alert } from 'react-native'
+import { Role } from '@/types'
 
 export async function login(email: string, password: string) {
   try {
@@ -39,6 +39,21 @@ export async function logout() {
     }
   } catch (error) {
     console.error('Erro ao fazer logout:', error)
+  }
+}
+
+export async function createUser(values: {
+  username: string,
+  email: string,
+  password: string,
+  confirmPassword: string,
+  role: Role
+}) {
+  try {
+    await axios.post('/user', values);
+    return true
+  } catch (error) {
+    return false;
   }
 }
 

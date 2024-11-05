@@ -2,22 +2,28 @@ import { Colors } from "@/constants/Colors";
 import { View, TextInput, StyleSheet } from "react-native";
 
 interface Props {
-  placeholder?: string,
-  value?: string,
-  onChange?: (text: string) => void,
-  isPassword: boolean
+  placeholder?: string;
+  value?: string;
+  onChange?: (text: string) => void;
+  isPassword: boolean;
 }
 
-export default function InputText({value, placeholder, onChange, isPassword} : Props) {
+export default function InputText({
+  value,
+  placeholder,
+  onChange,
+  isPassword,
+}: Props) {
   return (
-      <TextInput 
-        secureTextEntry={isPassword}
-        style={styles.inputText}
-        value={value} 
-        placeholder={placeholder} 
-        onChangeText={onChange} 
-      />
-  )
+    <TextInput
+      secureTextEntry={isPassword}
+      style={styles.inputText}
+      value={value}
+      placeholder={placeholder}
+      onChangeText={onChange}
+      autoCapitalize="none"
+    />
+  );
 }
 
 const styles = StyleSheet.create({
@@ -31,6 +37,6 @@ const styles = StyleSheet.create({
     // borderTopLeftRadius: 10,
     // borderTopRightRadius: 10,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.darkGrey
-  }
-})
+    borderBottomColor: Colors.darkGrey,
+  },
+});

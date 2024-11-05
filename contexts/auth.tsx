@@ -6,8 +6,8 @@ import React, {
   useContext,
 } from "react";
 
-import { User } from "@/types";
-import { handleLogin, logout } from "@/api/auth/authService";
+import { Role, User } from "@/types";
+import { createUser, handleLogin, logout } from "@/api/auth/authService";
 import { getUserFromJWT } from "@/api/auth/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -18,6 +18,13 @@ export interface AuthContextProps {
   error: string | null;
   onLogin: (email: string, password: string) => Promise<void>;
   onLogout: () => Promise<void>;
+  onRegister: (
+    username: string,
+    email: string,
+    password: string,
+    confirmPassword: string,
+    role: Role
+  ) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -69,6 +76,30 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const onRegister = async (
+    username: string,
+    email: string,
+    password: string,
+    confirmPassword: string,
+    role: Role
+  ) => {
+    setIsLoading(true);
+    try {
+      await createUser({
+        username,
+        email,
+        password,
+        confirmPassword,
+        role,
+      });
+      setError(null);
+    } catch (error) {
+      setError("Erro ao cadastrar");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -78,6 +109,7 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
         error,
         onLogin,
         onLogout,
+        onRegister,
       }}
     >
       {children}
