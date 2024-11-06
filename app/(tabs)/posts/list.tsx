@@ -1,11 +1,12 @@
-import { StyleSheet, Text, View, Image, Button } from 'react-native'
+import { StyleSheet, Text, View, Image } from 'react-native'
 import Header from '@/components/Header'
 import { Colors } from '@/constants/Colors'
 import { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { router } from 'expo-router'
-import { getPosts } from '../api/posts'
 import { format } from 'date-fns'
+import { getPosts } from '@/api/posts'
+import Button from '@/components/Button'
 export default function Index() {
   const [posts, setPosts] = useState<
     {
@@ -36,12 +37,10 @@ export default function Index() {
 
   const fetchPosts = async () => {
     const posts = await getPosts()
-    console.log(posts.image)
     if (!posts) {
       router.replace('/login')
     } else {
       setPosts(posts)
-      
     }
   }
 
@@ -52,23 +51,32 @@ export default function Index() {
         <View key={index}>
           <Text style={styles.text}>{post.title}</Text>
           <Text style={styles.paragraph}>
-            {formatDate(post.date) } - Por Professor(a) {post.user.username}
+            {formatDate(post.date)} - Por Professor(a) {post.user.username}
           </Text>
           {post.image && (
-            <Image
-              style={styles.image}
-              source={{ uri:post.image }}
-              onError={(e) =>
-                console.log(`Erro ao carregar imagem: ${e.nativeEvent.error}`)
-              }
-            />
+            <View style={styles.imageContainer}>
+              <Image
+                style={styles.image}
+                source={{ uri: post.image }}
+                onError={(e) =>
+                  console.log(`Erro ao carregar imagem: ${e.nativeEvent.error}`)
+                }
+              />
+            </View>
           )}
           <Text style={styles.content}>{post.content}</Text>
-          <Button 
-            title="Continuar a leitura"
-            onPress={() => router.replace(`/posts`)}
-          >
-          </Button>
+          <View style={styles.actionBar}>
+            <Button
+              styleType='primary'
+              title='Continuar a leitura'
+              onPress={() => router.navigate(`/posts/detail?postId=${post.id}`)}
+            ></Button>
+            <Button
+              styleType='secondary'
+              title='Editar postagem'
+              onPress={() => router.navigate(`/posts/detail?postId=${post.id}`)}
+            ></Button>
+          </View>
         </View>
       ))}
     </View>
@@ -81,9 +89,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    padding: 10,
   },
   text: {
+    paddingTop: 40,
     color: Colors.primary,
     fontWeight: 'bold',
     fontSize: 17,
@@ -97,11 +106,20 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   image: {
-    alignContent: 'center',
+    borderWidth: 1,
+    borderColor: Colors.primary,
     width: 200,
     height: 200,
     marginVertical: 10,
     backgroundColor: Colors.lightGrey,
   },
-
+  imageContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  actionBar: {
+    paddingTop: 10,
+    alignItems: 'center',
+  },
 })

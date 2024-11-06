@@ -1,22 +1,17 @@
 import { StyleSheet, Text, View } from "react-native";
+import { router, useLocalSearchParams } from "expo-router";
 import Header from "@/components/Header";
-import Button from "@/components/Button";
 import { Colors } from "@/constants/Colors";
-import { useAuthContext } from "@/contexts/auth";
+import Button from "@/components/Button";
 
-export default function Home() {
-  const { onLogout, isLoading } = useAuthContext();
+export default function PostDetail() {
+  const { postId } = useLocalSearchParams<{ postId: string }>();
 
   return (
     <View style={styles.container}>
-      <Header name="Home" />
-      <Text style={styles.text}>Home Screen</Text>
-      <Button
-        title={isLoading ? "Saindo..." : "Sair"}
-        icon="log-in"
-        onPress={onLogout}
-        isDisabled={isLoading}
-      />
+      <Header name={`Post ${postId}`} />
+      <Text style={styles.text}>Detailed Post Screen</Text>
+      <Button title="Go back" onPress={() => router.back()}></Button>
     </View>
   );
 }
