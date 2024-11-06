@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Alert } from "react-native";
 import { router } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import Header from "@/components/Header";
@@ -16,7 +16,7 @@ export default function Register() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [role, setRole] = useState<Role>("student");
+  const [role, setRole] = useState<Role | undefined>();
 
   const { handleRegister, isLoading } = useAuthContext();
 
@@ -25,7 +25,14 @@ export default function Register() {
   };
 
   const handleSubmit = async () => {
-    handleRegister(username, email, password, confirmPassword, role);
+    if (username && email && password && confirmPassword && role) {
+      handleRegister(username, email, password, confirmPassword, role);
+    } else {
+      Alert.alert(
+        "Preenchimento inválido",
+        "Preencha todos os campos para continuar"
+      );
+    }
   };
 
   return (

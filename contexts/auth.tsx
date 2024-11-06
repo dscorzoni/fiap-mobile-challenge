@@ -8,11 +8,12 @@ import React, {
 
 import { Role, User } from "@/types";
 import { login, logout } from "@/api/auth/authService";
-import { getUserFromJWT } from "@/api/auth/utils";
+import { getUserFromJWT } from "@/api/utils/token";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { Alert } from "react-native";
 import { createUser } from "@/api/user/userService";
+import { ERROR_MESSAGE } from "@/api/utils/errors";
 
 export interface AuthContextProps {
   isAuthenticated: boolean;
@@ -55,45 +56,43 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   const handleLogin = async (email: string, password: string) => {
+    if (!password || !email) {
+      setError(ERROR_MESSAGE.LOGIN_FAILED);
+      Alert.alert(ERROR_MESSAGE.LOGIN_FAILED);
+      return;
+    }
+
     setIsLoading(true);
 
-    try {
-      const success = await login(email, password);
+    const response = await login(email, password);
 
-      if (success) {
-        await decodeToken();
-        router.push("/home");
-      } else {
-        throw new Error();
-      }
-    } catch (err) {
-      setError("Erro ao autenticar");
-      Alert.alert("Erro ao autenticar", "Verifique suas credenciais.");
-    } finally {
-      setIsLoading(false);
+    if (response.success) {
+      await decodeToken();
+      router.push("/home");
+    } else {
+      setError(response.error);
+      Alert.alert(response.error, "Tente novamente");
     }
+
+    setIsLoading(false);
   };
 
   const handleLogout = async () => {
     setIsLoading(true);
 
-    try {
-      const success = await logout();
+    const response = await logout();
 
-      if (success) {
-        setUser(null);
-        setError(null);
-        router.replace("/login");
-        Alert.alert("Usuário deslogado");
-      } else {
-        throw new Error();
-      }
-    } catch (error) {
-      setError("Erro ao sair");
-      Alert.alert("Erro ao sair. Tente novamente.");
-    } finally {
-      setIsLoading(false);
+    if (response.success) {
+      setUser(null);
+      setError(null);
+      router.replace("/login");
+      Alert.alert("Usuário deslogado");
+    } else {
+      setError(response.error);
+      Alert.alert(response.error, "Tente novamente.");
     }
+
+    setIsLoading(false);
   };
 
   const handleRegister = async (
@@ -106,7 +105,7 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
     if (password !== confirmPassword) {
       Alert.alert(
         "Senhas diferentes",
-        "A senha e a confirmação de senha devem ser as mesmas."
+        "A senha e a confirmação de senha devem ser iguais."
       );
       setError("Senhas diferentes.");
       return;
@@ -114,27 +113,23 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
     setIsLoading(true);
 
-    try {
-      const success = await createUser({
-        username,
-        email,
-        password,
-        role,
-      });
+    const response = await createUser({
+      username,
+      email,
+      password,
+      role,
+    });
 
-      if (success) {
-        router.replace("/login");
-        Alert.alert("Usuário cadastrado", "Faça o login para continuar");
-        setError(null);
-      } else {
-        throw new Error();
-      }
-    } catch (error) {
-      setError("Erro ao cadastrar");
-      Alert.alert("Erro ao cadastrar. Tente novamente.");
-    } finally {
-      setIsLoading(false);
+    if (response.success) {
+      router.replace("/login");
+      Alert.alert("Usuário cadastrado", "Faça o login para continuar");
+      setError(null);
+    } else {
+      setError(response.error);
+      Alert.alert(response.error, "Tente novamente.");
     }
+
+    setIsLoading(false);
   };
 
   return (

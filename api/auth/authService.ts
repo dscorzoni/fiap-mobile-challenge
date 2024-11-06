@@ -1,9 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from '../lib/axios'
-import { Role } from '@/types'
-import { extractAccessToken } from './utils'
+import { extractAccessToken } from '../utils/token'
+import { ERROR_MESSAGE } from '../utils/errors'
+import { AxiosError } from 'axios'
+import { Result } from '@/types'
 
-export async function login(email: string, password: string) {
+export async function login(email: string, password: string): Promise<Result<void>> {
   try {
     const response = await axios.post('/auth/login', {
       email,
@@ -16,28 +18,30 @@ export async function login(email: string, password: string) {
       } else {
         throw new Error('Access token is undefined')
       }
-      return true
-    } else {
-      return false
+      return { success: true, value: undefined}
+  } else {
+      throw new Error()
     }
   } catch (error) {
-    console.error('Erro ao fazer login:', error)
-    return false
+    const message = (error as AxiosError).status === 401
+      ? ERROR_MESSAGE.LOGIN_FAILED
+      : ERROR_MESSAGE.INTERNAL_SERVER_ERROR
+    
+    return { success: false, error: message}
   }
 }
 
-export async function logout() {
+export async function logout(): Promise<Result<void>> {
   try {
     const response = await axios.post('/auth/logout')
 
     if (response.status === 200) {
       await AsyncStorage.removeItem('jwtToken')
-      return true
+    return { success: true, value: undefined }
     } else {
       throw new Error('Erro ao fazer logout')
     }
   } catch (error) {
-    console.error('Erro ao fazer logout:', error)
-    return false
+    return { success: false, error: ERROR_MESSAGE.INTERNAL_SERVER_ERROR}
   }
 }

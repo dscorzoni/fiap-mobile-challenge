@@ -1,23 +1,20 @@
 import axios from '../lib/axios'
-import { Role } from '@/types'
+import { Result, Role } from '@/types'
+import { getErrorMessage } from '../utils/errors';
+import { AxiosError } from 'axios';
 
 export async function createUser(params: {
   username: string,
   email: string,
   password: string,
   role: Role
-}) {
+}): Promise<Result<void>> {
+
   try {
-    const response = await axios.post('/user', params);
-    
-    if (response.status === 201) {
-      return true
-    } else {
-      throw new Error('Erro ao cadastrar usuário')
-    }
+    await axios.post('/user', params);
+    return { success: true , value: undefined }
   } catch (error) {
-    console.error('Erro ao cadastrar:', error)
-    return false;
+    return { success: false, error: getErrorMessage((error as AxiosError).status)}
   }
 }
 
