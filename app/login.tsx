@@ -23,13 +23,12 @@ export default function Login() {
       <InputText
         onChange={setEmail}
         value={email}
-        isPassword={false}
         placeholder="Digite seu nome de usuário"
       />
       <InputText
         onChange={setPassword}
         value={password}
-        isPassword={true}
+        isPassword
         placeholder="Digite sua senha"
       />
       <Text style={styles.forgotPassword}>Esqueci minha senha</Text>

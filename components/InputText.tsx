@@ -5,14 +5,14 @@ interface Props {
   placeholder?: string;
   value?: string;
   onChange?: (text: string) => void;
-  isPassword: boolean;
+  isPassword?: boolean;
 }
 
 export default function InputText({
   value,
   placeholder,
   onChange,
-  isPassword,
+  isPassword = false,
 }: Props) {
   return (
     <TextInput

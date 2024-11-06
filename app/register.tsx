@@ -44,22 +44,17 @@ export default function Register() {
       <Header name="Registre-se" />
       <Ionicons name="person-add-outline" size={150} style={styles.icon} />
       <InputText
-        isPassword={false}
         placeholder="Digite seu nome de usuário"
         onChange={setUsername}
       />
+      <InputText placeholder="Digite seu email" onChange={setEmail} />
       <InputText
-        isPassword={false}
-        placeholder="Digite seu email"
-        onChange={setEmail}
-      />
-      <InputText
-        isPassword={true}
+        isPassword
         placeholder="Digite sua senha"
         onChange={setPassword}
       />
       <InputText
-        isPassword={true}
+        isPassword
         placeholder="Confirme sua senha"
         onChange={setConfirmPassword}
       />
