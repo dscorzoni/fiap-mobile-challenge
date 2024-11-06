@@ -30,19 +30,20 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   radio: {
-    height: 20,
-    width: 20,
+    height: 16,
+    width: 16,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: Colors.graphiteGrey,
+    borderColor: Colors.primary,
     alignItems: "center",
     justifyContent: "center",
   },
   selectedRadio: {
-    backgroundColor: Colors.primary,
+    borderWidth: 5,
   },
   label: {
     marginLeft: 4,
+    fontSize: 15,
   },
 });
 

@@ -34,8 +34,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     gap: 16,
-    marginLeft: 20,
-    marginRight: "auto",
+    marginHorizontal: "auto",
+    marginTop: 4,
   },
 });
 

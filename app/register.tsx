@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Alert } from "react-native";
+import { StyleSheet, View, Text, Alert, ScrollView } from "react-native";
 import { router } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import Header from "@/components/Header";
@@ -36,7 +36,10 @@ export default function Register() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator={false}
+    >
       <StatusBar style="dark" />
       <Header name="Registre-se" />
       <Ionicons name="person-add-outline" size={150} style={styles.icon} />
@@ -60,7 +63,7 @@ export default function Register() {
         placeholder="Confirme sua senha"
         onChange={setConfirmPassword}
       />
-      <Text style={styles.radioTitle}>Selecione o perfil:</Text>
+      <Text style={styles.radioTitle}>Selecione um perfil:</Text>
       <RadioGroup
         options={[
           { label: "Aluno", value: "student" },
@@ -81,16 +84,17 @@ export default function Register() {
         styleType="secondary"
         onPress={() => router.push("/")}
       />
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: Colors.background,
     alignItems: "center",
     justifyContent: "center",
+    paddingVertical: 60,
   },
   icon: {
     color: Colors.primary,
@@ -104,11 +108,10 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
   radioTitle: {
-    fontSize: 16,
-    color: Colors.graphiteGrey,
-    marginRight: "auto",
-    marginLeft: 20,
+    fontSize: 14,
+    fontWeight: "bold",
+    color: Colors.black,
+    marginHorizontal: "auto",
     marginTop: 12,
-    marginBottom: 4,
   },
 });
