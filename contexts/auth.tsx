@@ -7,18 +7,21 @@ import React, {
 } from "react";
 
 import { Role, User } from "@/types";
-import { createUser, handleLogin, logout } from "@/api/auth/authService";
+import { login, logout } from "@/api/auth/authService";
 import { getUserFromJWT } from "@/api/auth/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
+import { Alert } from "react-native";
+import { createUser } from "@/api/user/userService";
 
 export interface AuthContextProps {
   isAuthenticated: boolean;
   user: User | null;
   isLoading: boolean;
   error: string | null;
-  onLogin: (email: string, password: string) => Promise<void>;
-  onLogout: () => Promise<void>;
-  onRegister: (
+  handleLogin: (email: string, password: string) => Promise<void>;
+  handleLogout: () => Promise<void>;
+  handleRegister: (
     username: string,
     email: string,
     password: string,
@@ -36,65 +39,99 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const checkLoginStatus = useCallback(async () => {
+  const decodeToken = useCallback(async () => {
     const token = await AsyncStorage.getItem("jwtToken");
 
     if (token) {
-      const u = getUserFromJWT(token);
-      setUser(u);
+      const loggedUser = getUserFromJWT(token);
+      setUser(loggedUser);
     } else {
       setUser(null);
     }
   }, []);
 
   useEffect(() => {
-    checkLoginStatus();
+    decodeToken();
   }, []);
 
-  const onLogin = async (email: string, password: string) => {
+  const handleLogin = async (email: string, password: string) => {
     setIsLoading(true);
+
     try {
-      await handleLogin(email, password);
-      await checkLoginStatus();
+      const success = await login(email, password);
+
+      if (success) {
+        await decodeToken();
+        router.push("/home");
+      } else {
+        throw new Error();
+      }
     } catch (err) {
-      setError("Erro ao logar");
+      setError("Erro ao autenticar");
+      Alert.alert("Erro ao autenticar", "Verifique suas credenciais.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const onLogout = async () => {
+  const handleLogout = async () => {
     setIsLoading(true);
+
     try {
-      await logout();
-      setUser(null);
-      setError(null);
+      const success = await logout();
+
+      if (success) {
+        setUser(null);
+        setError(null);
+        router.replace("/login");
+        Alert.alert("Usuário deslogado");
+      } else {
+        throw new Error();
+      }
     } catch (error) {
       setError("Erro ao sair");
+      Alert.alert("Erro ao sair. Tente novamente.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const onRegister = async (
+  const handleRegister = async (
     username: string,
     email: string,
     password: string,
     confirmPassword: string,
     role: Role
   ) => {
+    if (password !== confirmPassword) {
+      Alert.alert(
+        "Senhas diferentes",
+        "A senha e a confirmação de senha devem ser as mesmas."
+      );
+      setError("Senhas diferentes.");
+      return;
+    }
+
     setIsLoading(true);
+
     try {
-      await createUser({
+      const success = await createUser({
         username,
         email,
         password,
-        confirmPassword,
         role,
       });
-      setError(null);
+
+      if (success) {
+        router.replace("/login");
+        Alert.alert("Usuário cadastrado", "Faça o login para continuar");
+        setError(null);
+      } else {
+        throw new Error();
+      }
     } catch (error) {
       setError("Erro ao cadastrar");
+      Alert.alert("Erro ao cadastrar. Tente novamente.");
     } finally {
       setIsLoading(false);
     }
@@ -107,9 +144,9 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
         user,
         isLoading,
         error,
-        onLogin,
-        onLogout,
-        onRegister,
+        handleLogin,
+        handleLogout,
+        handleRegister,
       }}
     >
       {children}

@@ -13,7 +13,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { onLogin, isLoading } = useAuthContext();
+  const { handleLogin, isLoading } = useAuthContext();
 
   return (
     <View style={styles.container}>
@@ -36,7 +36,7 @@ export default function Login() {
       <View style={{ padding: 16 }} />
       <Button
         title={isLoading ? "Entrando..." : "Entrar"}
-        onPress={() => onLogin(email, password)}
+        onPress={() => handleLogin(email, password)}
         isDisabled={isLoading}
       />
       <Button

@@ -9,6 +9,29 @@ interface JWTPayload {
   exp: number; 
 }
 
+export const extractAccessToken = (response: any): string | null => {
+  const setCookieHeader = response.headers['set-cookie']
+  if (!setCookieHeader || typeof setCookieHeader !== 'object') {
+    return null
+  }
+
+  for (const key in setCookieHeader) {
+    if (setCookieHeader.hasOwnProperty(key)) {
+      const cookie = setCookieHeader[key]
+      if (cookie.includes('access_token=')) {
+        const token = cookie
+          .split(';')
+          .find((item: string) => item.trim().startsWith('access_token='))
+        if (token) {
+          return token.split('=')[1]
+        }
+      }
+    }
+  }
+
+  return null
+}
+
 export const decodeJWT = (token: string): JWTPayload | null => {
   try {
     const decoded = jwtDecode<JWTPayload>(token);

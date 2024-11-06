@@ -18,14 +18,14 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [role, setRole] = useState<Role>("student");
 
-  const { onRegister, isLoading } = useAuthContext();
+  const { handleRegister, isLoading } = useAuthContext();
 
   const handleValueChange = (value: string) => {
     setRole(value as Role);
   };
 
   const handleSubmit = async () => {
-    onRegister(username, email, password, confirmPassword, role);
+    handleRegister(username, email, password, confirmPassword, role);
   };
 
   return (
