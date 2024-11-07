@@ -1,25 +1,36 @@
 import { StyleSheet, Text, View } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
 import Header from "@/components/Header";
 import { Colors } from "@/constants/Colors";
+import { router } from "expo-router";
 import Button from "@/components/Button";
 import { useAuthContext } from "@/contexts/auth";
+import { useEffect } from "react";
 
-export default function PostDetail() {
+export default function Rede() {
   const { user } = useAuthContext();
-  const { postId } = useLocalSearchParams<{ postId: string }>();
+  const isStudent = user?.role === "student";
+
+  useEffect(() => {
+    if (isStudent) {
+      router.replace(`/rede/student-list`);
+      return;
+    }
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Header name={`Post ${postId}`} />
-      <Text style={styles.text}>Detailed Post Screen</Text>
-      {user?.role !== "student" && (
+      <Header name="Rede" />
+      <Text style={styles.text}>Rede Screen</Text>
+      {!isStudent && (
         <Button
-          title="Edit Post"
-          onPress={() => router.push(`/(tabs)/posts/edit?postId=${postId}`)}
+          title="Gerenciar Professores"
+          onPress={() => router.push(`/rede/teacher-list`)}
         />
       )}
-      <Button title="Go back" onPress={() => router.back()}></Button>
+      <Button
+        title="Gerenciar Alunos"
+        onPress={() => router.push(`/rede/student-list`)}
+      />
     </View>
   );
 }

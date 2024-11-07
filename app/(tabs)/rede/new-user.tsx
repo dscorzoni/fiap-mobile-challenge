@@ -3,22 +3,17 @@ import { router, useLocalSearchParams } from "expo-router";
 import Header from "@/components/Header";
 import { Colors } from "@/constants/Colors";
 import Button from "@/components/Button";
-import { useAuthContext } from "@/contexts/auth";
+import { Role } from "@/types";
 
-export default function PostDetail() {
-  const { user } = useAuthContext();
-  const { postId } = useLocalSearchParams<{ postId: string }>();
+export default function RedeNewUser() {
+  const { role } = useLocalSearchParams<{ role: Role }>();
+
+  const roleLabel = role === "teacher" ? "Professor" : "Aluno";
 
   return (
     <View style={styles.container}>
-      <Header name={`Post ${postId}`} />
-      <Text style={styles.text}>Detailed Post Screen</Text>
-      {user?.role !== "student" && (
-        <Button
-          title="Edit Post"
-          onPress={() => router.push(`/(tabs)/posts/edit?postId=${postId}`)}
-        />
-      )}
+      <Header name={`Criar novo ${roleLabel}`} />
+      <Text style={styles.text}>New User Screen</Text>
       <Button title="Go back" onPress={() => router.back()}></Button>
     </View>
   );
