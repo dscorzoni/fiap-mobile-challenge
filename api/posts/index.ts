@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Platform } from 'react-native'
 
 export async function getPosts() {
-  const base = Platform.OS === 'ios' ? 'localhost' : ''
+  const base = Platform.OS === 'ios' ? 'localhost' : '10.0.2.2'
   try {
     const token = await AsyncStorage.getItem('jwtToken')
     if (!token) {
