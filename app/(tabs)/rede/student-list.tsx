@@ -3,10 +3,9 @@ import Header from "@/components/Header";
 import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
 import Button from "@/components/Button";
+import UserList from "@/components/UserLIst";
 
 export default function RedeStudent() {
-  const students = [1, 2, 3, 4, 5];
-
   return (
     <View style={styles.container}>
       <Header name="Gerenciar Alunos" />
@@ -15,15 +14,9 @@ export default function RedeStudent() {
         title="Criar Aluno"
         onPress={() => router.push(`/rede/new-user?role=student`)}
       />
-      {students.map((student) => (
-        <Button
-          key={student}
-          title={`Editar Aluno ${student}`}
-          onPress={() =>
-            router.push(`/rede/edit-user?role=student&userId=${student}`)
-          }
-        />
-      ))}
+      <View style={styles.border}>
+        <UserList role={"student"} />
+      </View>
       <Button title="Voltar" onPress={() => router.back()} />
     </View>
   );
@@ -38,5 +31,9 @@ const styles = StyleSheet.create({
   },
   text: {
     color: Colors.primary,
+  },
+  border: {
+    borderWidth: 1,
+    padding: 10,
   },
 });

@@ -1,17 +1,14 @@
-import { StyleSheet, Text, View } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
-import Header from "@/components/Header";
+import { StyleSheet, View } from "react-native";
+import { useLocalSearchParams } from "expo-router";
 import { Colors } from "@/constants/Colors";
-import Button from "@/components/Button";
+import EditPost from "@/components/EditPost";
 
-export default function PostDetail() {
+export default function EditPostScreen() {
   const { postId } = useLocalSearchParams<{ postId: string }>();
 
   return (
-    <View style={styles.container}>
-      <Header name={`Editar Post ${postId}`} />
-      <Text style={styles.text}>Edit Post Screen</Text>
-      <Button title="Go back" onPress={() => router.back()}></Button>
+    <View style={[styles.border, styles.container]}>
+      <EditPost postId={postId} />
     </View>
   );
 }
@@ -23,7 +20,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  text: {
-    color: Colors.primary,
+  border: {
+    borderWidth: 1,
+    marginHorizontal: 10,
+    marginVertical: 150,
   },
 });

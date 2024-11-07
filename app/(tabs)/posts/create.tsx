@@ -1,24 +1,19 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router } from 'expo-router';
 import Header from '@/components/Header';
 import { Colors } from '@/constants/Colors';
 import Button from '@/components/Button';
-import { Role } from '@/types';
-import UserForm from '@/components/UserForm';
+import PostForm from '@/components/PostForm';
 
-export default function RedeNewUser() {
-  const { role } = useLocalSearchParams<{ role: Role }>();
-
-  const roleLabel = role === 'teacher' ? 'Professor' : 'Aluno';
-
+export default function CreatePost() {
   return (
     <View style={styles.container}>
-      <Header name={`Criar novo ${roleLabel}`} />
-      <Text style={styles.text}>New User Screen</Text>
+      <Header name='Criar novo post' />
+      <Text style={styles.text}>New Post Screen</Text>
       <View style={styles.border}>
-        <UserForm role={role} />
+        <PostForm />
       </View>
-      <Button title='Go back' onPress={() => router.back()} />
+      <Button title='Voltar' onPress={() => router.back()}></Button>
     </View>
   );
 }

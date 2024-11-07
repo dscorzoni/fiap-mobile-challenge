@@ -15,7 +15,7 @@ export default function PostsList() {
       <Text style={styles.text}>Posts Screen</Text>
 
       {user?.role !== "student" && (
-        <Button title="New Post" onPress={() => router.push(`/posts/new`)} />
+        <Button title="New Post" onPress={() => router.push(`/posts/create`)} />
       )}
 
       {posts.map((post) => (
