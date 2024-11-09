@@ -4,7 +4,9 @@ export type PostData = {
   content: string,
   date?: Date,
   image?: string
-
+  user: {
+    username: string
+  }
 }
 
 export type Post = PostData  & { author: string }
