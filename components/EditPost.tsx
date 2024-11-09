@@ -3,22 +3,23 @@ import { router, useLocalSearchParams } from "expo-router";
 import Header from "@/components/Header";
 import { Colors } from "@/constants/Colors";
 import Button from "@/components/Button";
-import { useAuthContext } from "@/contexts/auth";
+import PostForm from "@/components/PostForm";
+import { Post } from "@/types";
 
-export default function PostDetail() {
-  const { user } = useAuthContext();
-  const { postId } = useLocalSearchParams<{ postId: string }>();
+interface Props {
+  postId: string;
+}
 
+export default function EditPost({ postId }: Props) {
   return (
     <View style={styles.container}>
-      <Header name={`Post ${postId}`} />
-      <Text style={styles.text}>Detailed Post Screen</Text>
-      {user?.role !== "student" && (
-        <Button
-          title="Edit Post"
-          onPress={() => router.push(`/(tabs)/posts/edit?postId=${postId}`)}
-        />
-      )}
+      <Header name={`Editar Post ${postId}`} />
+      <Text style={{ fontWeight: "bold" }}>TO DO: EditPost Component</Text>
+      <Text>componente EditPost reaproveitado nas rotas:</Text>
+      <Text style={{ marginBottom: 30 }}>posts/edit e admin/edit-post</Text>
+      <View style={styles.border}>
+        <PostForm initialValues={{} as Post} />
+      </View>
       <Button title="Go back" onPress={() => router.back()}></Button>
     </View>
   );
@@ -33,5 +34,9 @@ const styles = StyleSheet.create({
   },
   text: {
     color: Colors.primary,
+  },
+  border: {
+    borderWidth: 1,
+    padding: 5,
   },
 });
