@@ -20,10 +20,12 @@ export default function Home() {
           onPress={() => router.push(`/(tabs)/rede/teacher-list`)}
         />
       )}
-      <Button
-        title="Alunos"
-        onPress={() => router.push(`/(tabs)/rede/student-list`)}
-      />
+      {user?.role !== "student" && (
+        <Button
+          title="Alunos"
+          onPress={() => router.push(`/(tabs)/rede/student-list`)}
+        />
+      )}
       {user?.role === "admin" && (
         <Button title="Admin" onPress={() => router.push(`/(tabs)/admin`)} />
       )}

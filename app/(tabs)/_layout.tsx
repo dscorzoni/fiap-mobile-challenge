@@ -12,6 +12,7 @@ export default function TabLayout() {
   }
 
   const adminProps = user?.role === "admin" ? {} : { href: null };
+  const studentProps = user?.role === "student" ? { href: null } : {};
 
   return (
     <Tabs
@@ -63,6 +64,7 @@ export default function TabLayout() {
               size={24}
             />
           ),
+          ...studentProps,
         }}
       />
       <Tabs.Screen

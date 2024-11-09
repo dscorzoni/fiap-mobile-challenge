@@ -21,12 +21,10 @@ export default function Rede() {
     <View style={styles.container}>
       <Header name="Rede" />
       <Text style={styles.text}>Rede Screen</Text>
-      {!isStudent && (
-        <Button
-          title="Gerenciar Professores"
-          onPress={() => router.push(`/rede/teacher-list`)}
-        />
-      )}
+      <Button
+        title="Gerenciar Professores"
+        onPress={() => router.push(`/rede/teacher-list`)}
+      />
       <Button
         title="Gerenciar Alunos"
         onPress={() => router.push(`/rede/student-list`)}
