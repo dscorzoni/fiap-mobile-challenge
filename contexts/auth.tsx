@@ -6,18 +6,29 @@ import React, {
   useContext,
 } from "react";
 
-import { User } from "@/types";
-import { handleLogin, logout } from "@/api/auth/authService";
-import { getUserFromJWT } from "@/api/auth/utils";
+import { Role, User } from "@/types";
+import { login, logout } from "@/api/auth/authService";
+import { getUserFromJWT } from "@/api/utils/token";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
+import { Alert } from "react-native";
+import { createUser } from "@/api/user/userService";
+import { ERROR_MESSAGE } from "@/api/utils/errors";
 
 export interface AuthContextProps {
   isAuthenticated: boolean;
   user: User | null;
   isLoading: boolean;
   error: string | null;
-  onLogin: (email: string, password: string) => Promise<void>;
-  onLogout: () => Promise<void>;
+  handleLogin: (email: string, password: string) => Promise<void>;
+  handleLogout: () => Promise<void>;
+  handleRegister: (
+    username: string,
+    email: string,
+    password: string,
+    confirmPassword: string,
+    role: Role
+  ) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -29,44 +40,96 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const checkLoginStatus = useCallback(async () => {
+  const decodeToken = useCallback(async () => {
     const token = await AsyncStorage.getItem("jwtToken");
 
     if (token) {
-      const u = getUserFromJWT(token);
-      setUser(u);
+      const loggedUser = getUserFromJWT(token);
+      setUser(loggedUser);
     } else {
       setUser(null);
     }
   }, []);
 
   useEffect(() => {
-    checkLoginStatus();
+    decodeToken();
   }, []);
 
-  const onLogin = async (email: string, password: string) => {
-    setIsLoading(true);
-    try {
-      await handleLogin(email, password);
-      await checkLoginStatus();
-    } catch (err) {
-      setError("Erro ao logar");
-    } finally {
-      setIsLoading(false);
+  const handleLogin = async (email: string, password: string) => {
+    if (!password || !email) {
+      setError(ERROR_MESSAGE.LOGIN_FAILED);
+      Alert.alert(ERROR_MESSAGE.LOGIN_FAILED);
+      return;
     }
+
+    setIsLoading(true);
+
+    const response = await login(email, password);
+
+    if (response.success) {
+      await decodeToken();
+      router.push("/home");
+    } else {
+      setError(response.error);
+      Alert.alert(response.error, "Tente novamente");
+    }
+
+    setIsLoading(false);
   };
 
-  const onLogout = async () => {
+  const handleLogout = async () => {
     setIsLoading(true);
-    try {
-      await logout();
+
+    const response = await logout();
+
+    if (response.success) {
       setUser(null);
       setError(null);
-    } catch (error) {
-      setError("Erro ao sair");
-    } finally {
-      setIsLoading(false);
+      router.replace("/login");
+      Alert.alert("Usuário deslogado");
+    } else {
+      setError(response.error);
+      Alert.alert(response.error, "Tente novamente.");
     }
+
+    setIsLoading(false);
+  };
+
+  const handleRegister = async (
+    username: string,
+    email: string,
+    password: string,
+    confirmPassword: string,
+    role: Role
+  ) => {
+    if (password !== confirmPassword) {
+      Alert.alert(
+        "Senhas diferentes",
+        "A senha e a confirmação de senha devem ser iguais."
+      );
+      setError("Senhas diferentes.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    const response = await createUser({
+      username,
+      email,
+      password,
+      role,
+    });
+
+    if (response.success) {
+      router.replace("/login");
+      Alert.alert("Usuário cadastrado", "Faça o login para continuar");
+      setError(null);
+    } else {
+      setError(response.error);
+      Alert.alert(response.error, "Tente novamente.");
+    }
+
+    setIsLoading(false);
   };
 
   return (
@@ -76,8 +139,9 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
         user,
         isLoading,
         error,
-        onLogin,
-        onLogout,
+        handleLogin,
+        handleLogout,
+        handleRegister,
       }}
     >
       {children}
