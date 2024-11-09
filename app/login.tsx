@@ -13,7 +13,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { onLogin, isLoading } = useAuthContext();
+  const { handleLogin, isLoading } = useAuthContext();
 
   return (
     <View style={styles.container}>
@@ -23,20 +23,19 @@ export default function Login() {
       <InputText
         onChange={setEmail}
         value={email}
-        isPassword={false}
         placeholder="Digite seu nome de usuário"
       />
       <InputText
         onChange={setPassword}
         value={password}
-        isPassword={true}
+        isPassword
         placeholder="Digite sua senha"
       />
       <Text style={styles.forgotPassword}>Esqueci minha senha</Text>
       <View style={{ padding: 16 }} />
       <Button
         title={isLoading ? "Entrando..." : "Entrar"}
-        onPress={() => onLogin(email, password)}
+        onPress={() => handleLogin(email, password)}
         isDisabled={isLoading}
       />
       <Button

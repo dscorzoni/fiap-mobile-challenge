@@ -6,7 +6,7 @@ import { useAuthContext } from "@/contexts/auth";
 import { router } from "expo-router";
 
 export default function Home() {
-  const { onLogout, isLoading, user } = useAuthContext();
+  const { handleLogout, isLoading, user } = useAuthContext();
 
   return (
     <View style={styles.container}>
@@ -32,7 +32,7 @@ export default function Home() {
       <Button
         title={isLoading ? "Saindo..." : "Sair"}
         icon="log-in"
-        onPress={onLogout}
+        onPress={handleLogout}
         isDisabled={isLoading}
       />
     </View>
