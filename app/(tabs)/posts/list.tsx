@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
 import Header from '@/components/Header'
 import { Colors } from '@/constants/Colors'
 import { useEffect, useState } from 'react'
@@ -7,27 +7,17 @@ import { router } from 'expo-router'
 import { format } from 'date-fns'
 import { getPosts } from '@/api/posts'
 import Button from '@/components/Button'
+import { PostData } from '@/types/posts'
+import { useAuthContext } from '@/contexts/auth'
 export default function Index() {
-  const [posts, setPosts] = useState<
-    {
-      id: number
-      title: string
-      date: string
-      user: { username: string }
-      content: string
-      image: string
-    }[]
-  >([])
+  const [posts, setPosts] = useState<PostData[]>()
+  const { user } = useAuthContext()
+
   useEffect(() => {
-    const checkLoginStatus = async () => {
-      const token = await AsyncStorage.getItem('jwtToken')
-      if (!token) {
-        router.replace('/login') // Redireciona para a tela de login se o token não estiver presente
-      }
+    if (user) {
+      fetchPosts()
     }
-    checkLoginStatus()
-    fetchPosts()
-  }, [])
+  }, [user])
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -44,27 +34,25 @@ export default function Index() {
   }
   const [isTitleVisible, setIsTitleVisible] = useState(true)
 
-  const handleScroll = (event) => {
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const offsetY = event.nativeEvent.contentOffset.y
     setIsTitleVisible(offsetY < 50)
   }
 
   return (
     <View style={styles.container}>
-      {isTitleVisible && (
-          <Header name='Lista de Posts' />
-      )}
+      {isTitleVisible && <Header name='Lista de Posts' />}
       <ScrollView
         contentContainerStyle={styles.contentContainer}
         onScroll={handleScroll}
         scrollEventThrottle={16}
         style={{ flex: 1 }}
       >
-        {posts.map((post) => (
+        {posts && posts.map((post) => (
           <View key={post.id} style={styles.postContainer}>
             <Text style={styles.text}>{post.title}</Text>
             <Text style={styles.paragraph}>
-              {formatDate(post.date)} - Por Professor(a) {post.user.username}
+              {formatDate(String(post.date))} - Por Professor(a) {post.user.username}
             </Text>
             {post.image && (
               <View style={styles.imageContainer}>
@@ -79,7 +67,7 @@ export default function Index() {
                 />
               </View>
             )}
-            <Text style={styles.content}>{post.content}</Text>
+            <Text style={styles.content} numberOfLines={5} ellipsizeMode='tail'>{post.content}</Text>
             <View style={styles.actionBar}>
               <Button
                 styleType='primary'
