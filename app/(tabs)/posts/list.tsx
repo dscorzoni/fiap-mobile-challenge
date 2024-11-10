@@ -4,25 +4,21 @@ import { Colors } from '@/constants/Colors'
 import { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { router } from 'expo-router'
-import { format } from 'date-fns'
 import { getPosts } from '@/api/posts'
 import Button from '@/components/Button'
 import { PostData } from '@/types/posts'
 import { useAuthContext } from '@/contexts/auth'
+import { formatDate } from '@/constants/FormatDate'
+import { useHandleScroll } from '@/constants/HandleScroll'
 export default function Index() {
   const [posts, setPosts] = useState<PostData[]>()
   const { user } = useAuthContext()
-
+  const { isTitleVisible, handleScroll } = useHandleScroll()
   useEffect(() => {
     if (user) {
       fetchPosts()
     }
   }, [user])
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return format(date, 'dd/MM/yyyy')
-  }
 
   const fetchPosts = async () => {
     const posts = await getPosts()
@@ -31,12 +27,6 @@ export default function Index() {
     } else {
       setPosts(posts)
     }
-  }
-  const [isTitleVisible, setIsTitleVisible] = useState(true)
-
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const offsetY = event.nativeEvent.contentOffset.y
-    setIsTitleVisible(offsetY < 50)
   }
 
   return (
@@ -76,13 +66,13 @@ export default function Index() {
                   router.navigate(`/posts/detail?postId=${post.id}`)
                 }
               ></Button>
-              <Button
+                <Button
                 styleType='secondary'
                 title='Editar postagem'
                 onPress={() =>
-                  router.navigate(`/posts/detail?postId=${post.id}`)
+                  router.navigate(`/posts/edit?postId=${post.id}`)
                 }
-              ></Button>
+                ></Button>
             </View>
           </View>
         ))}

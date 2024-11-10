@@ -5,6 +5,7 @@ export default function Layout() {
     <Stack>
       <Stack.Screen name="list" options={{ headerShown: false }} />
       <Stack.Screen name="detail" options={{ headerShown: false }} />
+      <Stack.Screen name="edit" options={{ headerShown: false }} />
     </Stack>
   );
 }
