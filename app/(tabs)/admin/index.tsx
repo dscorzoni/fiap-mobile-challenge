@@ -31,7 +31,6 @@ export default function Admin() {
   }, [user, posts]);
 
   function handleDelete(postId: string | undefined) {
-    console.log(postId);
     if (postId) {
       Alert.alert(
         "Apagar post?",
