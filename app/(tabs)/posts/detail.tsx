@@ -8,8 +8,8 @@ import { useAuthContext } from "@/contexts/auth";
 import { getPostsById } from "@/api/posts";
 import { format } from "date-fns";
 import { PostData } from "@/types";
-import { formatDate } from "@/constants/FormatDate";
-import { useHandleScroll } from "@/constants/HandleScroll";
+import { formatDate } from "@/api/utils/dates";
+import { useHandleScroll } from "@/api/utils/handleScroll";
 
 export default function PostDetail() {
   const { user } = useAuthContext();
@@ -62,6 +62,7 @@ export default function PostDetail() {
           <Text style={styles.content}>{post.content}</Text>
           <View style={styles.actionBar}>
             <Button
+              icon='arrow-back-circle'
               styleType='primary'
               title='Voltar'
               onPress={() => router.back()}

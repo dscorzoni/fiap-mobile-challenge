@@ -8,8 +8,8 @@ import { getPosts } from '@/api/posts'
 import Button from '@/components/Button'
 import { PostData } from '@/types/posts'
 import { useAuthContext } from '@/contexts/auth'
-import { formatDate } from '@/constants/FormatDate'
-import { useHandleScroll } from '@/constants/HandleScroll'
+import { formatDate } from '@/api/utils/dates'
+import { useHandleScroll } from '@/api/utils/handleScroll'
 export default function Index() {
   const [posts, setPosts] = useState<PostData[]>()
   const { user } = useAuthContext()

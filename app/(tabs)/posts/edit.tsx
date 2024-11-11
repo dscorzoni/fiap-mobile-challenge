@@ -84,14 +84,28 @@ export default function PostEdit() {
   }
 
   const handleDelete = async () => {
-    try {
-      const response = await deletePost(post?.id as string)
-      if (response) {
-        Alert.alert('Post deletado com sucesso!')
-        router.replace(`/posts/list`)
-      }
-    } catch (error) {
-      console.error('Erro ao deletar post', error)
+    if (post?.id) {
+      Alert.alert(
+        'Apagar post?',
+        'Você tem certeza que deseja apagar este post?',
+        [
+          {
+            text: 'Apagar',
+            onPress: async () => {
+              try {
+                const response = await deletePost(post?.id as string)
+                if (response) {
+                  Alert.alert('Post deletado com sucesso!')
+                  router.replace(`/posts/list`)
+                }
+              } catch (error) {
+                console.error('Erro ao deletar post', error)
+              }
+            },
+          },
+          { text: 'Cancelar', onPress: () => null },
+        ]
+      )
     }
   }
 
@@ -120,10 +134,18 @@ export default function PostEdit() {
       {imagePreview && (
         <Image source={{ uri: imagePreview }} style={styles.imagePreview} />
       )}
-
-      <Button isDisabled={!hasChanges} title='Salvar' onPress={handleSave} />
-      <Button title='Voltar' onPress={() => router.back()} />
-      <Button title='Deletar' onPress={handleDelete} />
+      <Button
+        icon='save'
+        isDisabled={!hasChanges}
+        title='Salvar'
+        onPress={handleSave}
+      />
+      <Button
+        icon='arrow-back-circle'
+        title='Voltar'
+        onPress={() => router.back()}
+      />
+      <Button icon='trash' title='Deletar' onPress={handleDelete} />
     </View>
   )
 }
@@ -154,8 +176,8 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 5,
-    height: 250, 
-    textAlignVertical: 'top', 
+    height: 250,
+    textAlignVertical: 'top',
   },
   uploadButton: {
     backgroundColor: Colors.uploadButton,
@@ -171,5 +193,10 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     marginVertical: 10,
+  },
+  icon: {
+    alignContent: 'center',
+    fontSize: 20,
+    color: Colors.white,
   },
 })
