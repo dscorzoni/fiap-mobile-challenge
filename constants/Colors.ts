@@ -7,4 +7,6 @@ export const Colors = {
   grandientLight: "#febe71",
   gradientDark: "#a95d00",
   defaultText: "#000000",
+  white: "#fff",
+  uploadButton: "#007bff",
 }

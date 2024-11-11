@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import { PostData } from "@/types";
 import { formatDate } from "@/constants/FormatDate";
 import { useHandleScroll } from "@/constants/HandleScroll";
+
 export default function PostDetail() {
   const { postId } = useLocalSearchParams<{ postId: string }>();
   const [post, setPosts] = useState<PostData>()

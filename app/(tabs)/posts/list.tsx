@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
 import Header from '@/components/Header'
 import { Colors } from '@/constants/Colors'
 import { useEffect, useState } from 'react'
@@ -38,44 +38,52 @@ export default function Index() {
         scrollEventThrottle={16}
         style={{ flex: 1 }}
       >
-        {posts && posts.map((post) => (
-          <View key={post.id} style={styles.postContainer}>
-            <Text style={styles.text}>{post.title}</Text>
-            <Text style={styles.paragraph}>
-              {formatDate(String(post.date))} - Por Professor(a) {post.user.username}
-            </Text>
-            {post.image && (
-              <View style={styles.imageContainer}>
-                <Image
-                  style={styles.image}
-                  source={{ uri: post.image }}
-                  onError={(e) =>
-                    console.log(
-                      `Erro ao carregar imagem: ${e.nativeEvent.error}`
-                    )
-                  }
-                />
-              </View>
-            )}
-            <Text style={styles.content} numberOfLines={5} ellipsizeMode='tail'>{post.content}</Text>
-            <View style={styles.actionBar}>
-              <Button
-                styleType='primary'
-                title='Continuar a leitura'
-                onPress={() =>
-                  router.navigate(`/posts/detail?postId=${post.id}`)
-                }
-              ></Button>
+        {posts &&
+          posts.map((post) => (
+            <View key={post.id} style={styles.postContainer}>
+              <Text style={styles.text}>{post.title}</Text>
+              <Text style={styles.paragraph}>
+                {formatDate(String(post.date))} - Por Professor(a){' '}
+                {post.user.username}
+              </Text>
+              {post.image && (
+                <View style={styles.imageContainer}>
+                  <Image
+                    style={styles.image}
+                    source={{ uri: post.image }}
+                    onError={(e) =>
+                      console.log(
+                        `Erro ao carregar imagem: ${e.nativeEvent.error}`
+                      )
+                    }
+                  />
+                </View>
+              )}
+              <Text
+                style={styles.content}
+                numberOfLines={5}
+                ellipsizeMode='tail'
+              >
+                {post.content}
+              </Text>
+              <View style={styles.actionBar}>
                 <Button
-                styleType='secondary'
-                title='Editar postagem'
-                onPress={() =>
-                  router.navigate(`/posts/edit?postId=${post.id}`)
-                }
+                  styleType='primary'
+                  title='Continuar a leitura'
+                  onPress={() =>
+                    router.navigate(`/posts/detail?postId=${post.id}`)
+                  }
                 ></Button>
+                <Button
+                  styleType='secondary'
+                  title='Editar postagem'
+                  onPress={() =>
+                    router.navigate(`/posts/edit?postId=${post.id}`)
+                  }
+                ></Button>
+              </View>
             </View>
-          </View>
-        ))}
+          ))}
       </ScrollView>
     </View>
   )

@@ -15,6 +15,7 @@ import { useAuthContext } from '@/contexts/auth'
 import { PostData } from '@/types'
 import { getPostsById, updatePost, excludePost } from '@/api/posts'
 import * as ImagePicker from 'expo-image-picker'
+import { Colors } from '@/constants/Colors'
 
 export default function PostEdit() {
   const { postId } = useLocalSearchParams<{ postId: string }>()
@@ -106,7 +107,7 @@ export default function PostEdit() {
         onChangeText={(text) => handleInputChange('title', text)}
       />
       <TextInput
-        style={styles.input}
+        style={styles.textarea}
         placeholder='Content'
         value={post?.content || ''}
         onChangeText={(text) => handleInputChange('content', text)}
@@ -147,17 +148,23 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   textarea: {
-    height: 100, 
+    width: '80%',
+    padding: 10,
+    marginVertical: 10,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 250, 
     textAlignVertical: 'top', 
   },
   uploadButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: Colors.uploadButton,
     padding: 10,
     borderRadius: 5,
     marginVertical: 10,
   },
   uploadButtonText: {
-    color: '#fff',
+    color: Colors.white,
     textAlign: 'center',
   },
   imagePreview: {
