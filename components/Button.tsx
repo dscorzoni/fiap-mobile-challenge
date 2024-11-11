@@ -93,7 +93,7 @@ const styles = StyleSheet.create<Styles>({
   },
   textPrimary: {
     ...baseText,
-    color: "#fff",
+    color: Colors.white,
   },
   textPrimaryDisabled: {
     ...baseText,

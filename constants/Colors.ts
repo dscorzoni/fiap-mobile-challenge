@@ -9,4 +9,5 @@ export const Colors = {
   defaultText: "#000000",
   white: "#fff",
   uploadButton: "#007bff",
+  warning: "#BB2124"
 }

@@ -12,9 +12,9 @@ import { formatDate } from "@/constants/FormatDate";
 import { useHandleScroll } from "@/constants/HandleScroll";
 
 export default function PostDetail() {
+  const { user } = useAuthContext();
   const { postId } = useLocalSearchParams<{ postId: string }>();
   const [post, setPosts] = useState<PostData>()
-  const { user } = useAuthContext()
   const { isTitleVisible, handleScroll } = useHandleScroll()
   useEffect(() => {
     if (user) {

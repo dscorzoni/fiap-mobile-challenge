@@ -13,7 +13,7 @@ import Button from '@/components/Button'
 import { useEffect, useRef, useState } from 'react'
 import { useAuthContext } from '@/contexts/auth'
 import { PostData } from '@/types'
-import { getPostsById, updatePost, excludePost } from '@/api/posts'
+import { getPostsById, updatePost, deletePost } from '@/api/posts'
 import * as ImagePicker from 'expo-image-picker'
 import { Colors } from '@/constants/Colors'
 
@@ -85,7 +85,7 @@ export default function PostEdit() {
 
   const handleDelete = async () => {
     try {
-      const response = await excludePost(post?.id as string)
+      const response = await deletePost(post?.id as string)
       if (response) {
         Alert.alert('Post deletado com sucesso!')
         router.replace(`/posts/list`)

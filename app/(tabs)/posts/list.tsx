@@ -16,22 +16,22 @@ export default function Index() {
   const { isTitleVisible, handleScroll } = useHandleScroll()
   useEffect(() => {
     if (user) {
-      fetchPosts()
+      fetchPosts();
     }
-  }, [user])
+  }, [user]);
 
   const fetchPosts = async () => {
-    const posts = await getPosts()
+    const posts = await getPosts();
     if (!posts) {
-      router.replace('/login')
+      router.replace("/login");
     } else {
-      setPosts(posts)
+      setPosts(posts);
     }
   }
 
   return (
     <View style={styles.container}>
-      {isTitleVisible && <Header name='Lista de Posts' />}
+      {isTitleVisible && <Header name="Lista de Posts" />}
       <ScrollView
         contentContainerStyle={styles.contentContainer}
         onScroll={handleScroll}
@@ -86,7 +86,7 @@ export default function Index() {
           ))}
       </ScrollView>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   text: {
     paddingTop: 40,
     color: Colors.primary,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 17,
   },
   content: {
@@ -125,12 +125,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.lightGrey,
   },
   imageContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
   },
   actionBar: {
     paddingTop: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
-})
+});

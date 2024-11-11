@@ -29,12 +29,12 @@ export async function updatePost(data: any) {
   }
 }
 
-export async function excludePost(id: string) {
+export async function deletePost(postId: string) {
   try {
-    const response = await axios.delete(`/posts/${id}`)
-    return response.data
+    const response = await axios.delete('/posts/' + postId)
+    return response.status
   } catch (error) {
-    console.error('Erro ao deletar post', error)
+    console.error('Erro ao deletar post.', error)
     return false
   }
 }
