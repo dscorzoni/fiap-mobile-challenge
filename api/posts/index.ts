@@ -9,3 +9,13 @@ export async function getPosts() {
     return false
   }
 }
+
+export async function deletePost(postId: string) {
+  try {
+    const response = await axios.delete('/posts/' + postId)
+    return response.status
+  } catch (error) {
+    console.error('Erro ao deletar post.', error)
+    return false
+  }
+}
