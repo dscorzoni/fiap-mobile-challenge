@@ -1,36 +1,24 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  ScrollView,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-} from "react-native";
-import Header from "@/components/Header";
-import { Colors } from "@/constants/Colors";
-import { useEffect, useState } from "react";
-import { router } from "expo-router";
-import { format } from "date-fns";
-import { getPosts } from "@/api/posts";
-import Button from "@/components/Button";
-import { PostData } from "@/types/posts";
-import { useAuthContext } from "@/contexts/auth";
-
+import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
+import Header from '@/components/Header'
+import { Colors } from '@/constants/Colors'
+import { useEffect, useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { router } from 'expo-router'
+import { getPosts } from '@/api/posts'
+import Button from '@/components/Button'
+import { PostData } from '@/types/posts'
+import { useAuthContext } from '@/contexts/auth'
+import { formatDate } from '@/api/utils/dates'
+import { useHandleScroll } from '@/api/utils/handleScroll'
 export default function Index() {
-  const [posts, setPosts] = useState<PostData[]>();
-  const { user } = useAuthContext();
-
+  const [posts, setPosts] = useState<PostData[]>()
+  const { user } = useAuthContext()
+  const { isTitleVisible, handleScroll } = useHandleScroll()
   useEffect(() => {
     if (user) {
       fetchPosts();
     }
   }, [user]);
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return format(date, "dd/MM/yyyy");
-  };
 
   const fetchPosts = async () => {
     const posts = await getPosts();
@@ -39,13 +27,7 @@ export default function Index() {
     } else {
       setPosts(posts);
     }
-  };
-  const [isTitleVisible, setIsTitleVisible] = useState(true);
-
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const offsetY = event.nativeEvent.contentOffset.y;
-    setIsTitleVisible(offsetY < 50);
-  };
+  }
 
   return (
     <View style={styles.container}>
@@ -61,7 +43,7 @@ export default function Index() {
             <View key={post.id} style={styles.postContainer}>
               <Text style={styles.text}>{post.title}</Text>
               <Text style={styles.paragraph}>
-                {formatDate(String(post.date))} - Por Professor(a){" "}
+                {formatDate(String(post.date))} - Por Professor(a){' '}
                 {post.user.username}
               </Text>
               {post.image && (
@@ -80,23 +62,23 @@ export default function Index() {
               <Text
                 style={styles.content}
                 numberOfLines={5}
-                ellipsizeMode="tail"
+                ellipsizeMode='tail'
               >
                 {post.content}
               </Text>
               <View style={styles.actionBar}>
                 <Button
-                  styleType="primary"
-                  title="Continuar a leitura"
+                  styleType='primary'
+                  title='Continuar a leitura'
                   onPress={() =>
                     router.navigate(`/posts/detail?postId=${post.id}`)
                   }
                 ></Button>
                 <Button
-                  styleType="secondary"
-                  title="Editar postagem"
+                  styleType='secondary'
+                  title='Editar postagem'
                   onPress={() =>
-                    router.navigate(`/posts/detail?postId=${post.id}`)
+                    router.navigate(`/posts/edit?postId=${post.id}`)
                   }
                 ></Button>
               </View>
