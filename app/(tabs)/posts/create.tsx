@@ -56,7 +56,7 @@ export default function CreatePost() {
   const handleSave = async () => {
     try {
       post && user?.id ? (post.user_id = Number(user.id)) : null
-      const response = await createPost(post)
+      const response = await createPost(post as PostData)
       if (response) {
         Alert.alert('Post criado com sucesso!')
         router.replace(`/posts/list`)
