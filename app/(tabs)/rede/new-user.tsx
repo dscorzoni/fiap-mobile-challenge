@@ -9,11 +9,11 @@ import UserForm from '@/components/UserForm';
 export default function RedeNewUser() {
   const { role } = useLocalSearchParams<{ role: Role }>();
 
-  const roleLabel = role === 'teacher' ? 'Professor' : 'Aluno';
+  const roleLabel = role === 'teacher' ? 'Professor(a)' : 'Estudante';
 
   return (
     <View style={styles.container}>
-      <Header name={`Criar novo ${roleLabel}`} />
+      <Header name={`Novo(a) ${roleLabel}`} />
       <Text style={styles.text}>New User Screen</Text>
       <View style={styles.border}>
         <UserForm role={role} />
