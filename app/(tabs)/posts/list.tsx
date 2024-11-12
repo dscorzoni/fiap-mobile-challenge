@@ -57,18 +57,16 @@ export default function Index() {
           setSearchText={setSearchText}
           placeholder='Digite o título do post'
         ></SearchField>
-
-        {user?.role === 'admin' ||
-          (user?.role === 'teacher' && (
-            <View style={styles.newPost}>
-              <Button
-                icon='add'
-                styleType='primary'
-                title='Nova postagem'
-                onPress={() => router.navigate('/posts/create')}
-              ></Button>
-            </View>
-          ))}
+        {(user?.role === 'admin' || user?.role === 'teacher') && (
+          <View style={styles.newPost}>
+            <Button
+              icon='add'
+              styleType='primary'
+              title='Nova postagem'
+              onPress={() => router.navigate('/posts/create')}
+            ></Button>
+          </View>
+        )}
 
         {filteredPosts &&
           filteredPosts.map((post) => (
@@ -106,16 +104,15 @@ export default function Index() {
                     router.navigate(`/posts/detail?postId=${post.id}`)
                   }
                 ></Button>
-                {user?.role === 'admin' ||
-                  (user?.role === 'teacher' && (
-                    <Button
-                      styleType='secondary'
-                      title='Editar postagem'
-                      onPress={() =>
-                        router.navigate(`/posts/edit?postId=${post.id}`)
-                      }
-                    ></Button>
-                  ))}
+                {(user?.role === 'admin' || user?.role === 'teacher') && (
+                  <Button
+                    styleType='secondary'
+                    title='Editar postagem'
+                    onPress={() =>
+                      router.navigate(`/posts/edit?postId=${post.id}`)
+                    }
+                  ></Button>
+                )}
               </View>
             </View>
           ))}
