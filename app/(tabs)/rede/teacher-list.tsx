@@ -1,23 +1,86 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import Header from '@/components/Header';
 import { Colors } from '@/constants/Colors';
 import { router } from 'expo-router';
 import Button from '@/components/Button';
-import UserList from '@/components/UserLIst';
+import ManageUserItem from '@/components/ManageUserItem';
+import { useAuthContext } from '@/contexts/auth';
+
+const teachers = [
+  {
+    id: "1",
+    username: "user1",
+    email: "user1@mail.com"
+  },
+  {
+    id: "2",
+    username: "user2",
+    email: "user1@mail.com"
+  },
+  {
+    id: "3",
+    username: "user3",
+    email: "user1@mail.com"
+  },
+  {
+    id: "4",
+    username: "user4",
+    email: "user1@mail.com"
+  },
+]
 
 export default function RedeTeacher() {
+
+  const auth = useAuthContext()
+  if (auth.user?.role === 'student') {
+    router.replace("/")
+  }
+
+  function handleDelete(userId: string | undefined) {
+    if (userId) {
+      Alert.alert(
+        "Apagar professor(a)?",
+        "Você tem certeza que deseja apagar este(a) professor(a)?",
+        [
+          { text: "Apagar", onPress: () => Alert.alert(`TODO: Delete user ${userId} function.`) },
+          { text: "Cancelar", onPress: () => null },
+        ]
+      );
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Header name='Gerenciar Professores' />
-      <Text style={styles.text}>Rede Screen - Professores</Text>
+      <Header name='Professores' />
       <Button
-        title='Criar Professor'
+        title='Novo(a) Professor(a)'
         onPress={() => router.push(`/rede/new-user?role=teacher`)}
+        icon="person-add"
       />
-      <View style={styles.border}>
-        <UserList role={'teacher'} />
+      <View style={{
+        maxHeight: "70%"
+      }}>
+        <ScrollView showsVerticalScrollIndicator={true}
+          style={{
+            paddingLeft: 10
+            }}>
+          {
+          teachers.map((teacher) => {
+            return (
+              <ManageUserItem
+                key={teacher.id}
+                id={teacher.id}
+                username={teacher.username}
+                email={teacher.email}
+                editAction={() => router.push(`/rede/edit-user?userId=${teacher.id}`)}
+                deleteAction={() => handleDelete(teacher.id)}
+              />
+            )
+          })
+          }
+        </ScrollView>
       </View>
-      <Button title='Voltar' onPress={() => router.back()} />
+      <Button title='Voltar' styleType="secondary" onPress={() => router.back()} />
     </View>
   );
 }
@@ -28,12 +91,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  text: {
-    color: Colors.primary,
-  },
-  border: {
-    borderWidth: 1,
-    padding: 10,
+    paddingTop: 120,
+    gap: 20,
   },
 });
