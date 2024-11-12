@@ -116,13 +116,13 @@ export default function PostEdit() {
       <Header name={`Editar Post`} />
       <TextInput
         style={styles.input}
-        placeholder='Title'
+        placeholder='Título'
         value={post?.title || ''}
         onChangeText={(text) => handleInputChange('title', text)}
       />
       <TextInput
         style={styles.textarea}
-        placeholder='Content'
+        placeholder='Conteúdo'
         value={post?.content || ''}
         onChangeText={(text) => handleInputChange('content', text)}
         multiline

@@ -38,3 +38,13 @@ export async function deletePost(postId: string) {
     return false
   }
 }
+
+export async function createPost(data: any) {
+  try {
+    const response = await axios.post('/posts/', data)
+    return response.data
+  } catch (error) {
+    console.error('Erro ao criar post', error)
+    return false
+  }
+}
