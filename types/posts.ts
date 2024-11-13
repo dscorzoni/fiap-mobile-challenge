@@ -7,6 +7,7 @@ export type PostData = {
   user: {
     username: string
   }
+  user_id?: number
 }
 
 export type Post = PostData  & { author: string }

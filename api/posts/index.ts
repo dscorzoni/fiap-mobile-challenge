@@ -1,3 +1,4 @@
+import { PostData } from '@/types'
 import axios from '../lib/axios'
 
 export async function getPosts() {
@@ -35,6 +36,16 @@ export async function deletePost(postId: string) {
     return response.status
   } catch (error) {
     console.error('Erro ao deletar post.', error)
+    return false
+  }
+}
+
+export async function createPost(data: PostData) {
+  try {
+    const response = await axios.post('/posts/', data)
+    return response.data
+  } catch (error) {
+    console.error('Erro ao criar post', error)
     return false
   }
 }

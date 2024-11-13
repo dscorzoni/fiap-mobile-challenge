@@ -27,6 +27,7 @@ export default function Button({
     <TouchableOpacity
       onPress={onPress}
       style={getStyle("button", styleType, isDisabled)}
+      disabled={isDisabled}
     >
       {icon ? (
         <Ionicons name={icon} style={getStyle("text", styleType, isDisabled)} />
