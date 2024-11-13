@@ -54,7 +54,7 @@ export default function Admin() {
           onPress={() => router.push(`/(tabs)/rede/teacher-list`)}
         />
         <AdminButton
-          title={"Gerenciar Estudantes"}
+          title={"Gerenciar Alunos"}
           icon={"people"}
           onPress={() => router.push(`/(tabs)/rede/student-list`)}
         />

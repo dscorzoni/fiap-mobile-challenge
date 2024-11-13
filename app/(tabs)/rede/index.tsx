@@ -7,15 +7,15 @@ import { useAuthContext } from "@/contexts/auth";
 import { useEffect } from "react";
 
 export default function Rede() {
-  // const { user } = useAuthContext();
-  // const isStudent = user?.role === "student";
+  const { user } = useAuthContext();
+  const isStudent = user?.role === "student";
 
-  // useEffect(() => {
-  //   if (isStudent) {
-  //     router.replace(`/rede/student-list`);
-  //     return;
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (isStudent) {
+      router.replace(`/rede/student-list`);
+      return;
+    }
+  }, []);
 
   return (
     <View style={styles.container}>
