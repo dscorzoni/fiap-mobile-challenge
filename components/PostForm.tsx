@@ -1,5 +1,6 @@
 import { Text, StyleSheet } from "react-native";
 import { Post } from "@/types";
+import React from "react";
 
 interface Props {
   initialValues?: Post;
