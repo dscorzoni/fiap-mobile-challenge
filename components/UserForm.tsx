@@ -53,7 +53,6 @@ export default function UserForm({ role, initialValues }: Props) {
 
   return (
     <>
-    <Text>{roleLabel}</Text>
       <TextInput
         autoCapitalize='none'
         style={styles.input}
