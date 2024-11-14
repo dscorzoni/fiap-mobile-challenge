@@ -1,5 +1,5 @@
 import axios from '../lib/axios'
-import { Result, Role } from '@/types'
+import { Result, Role, User } from '@/types'
 import { getErrorMessage } from '../utils/errors';
 import { AxiosError } from 'axios';
 
@@ -18,3 +18,11 @@ export async function createUser(params: {
   }
 }
 
+export async function getUsers(): Promise<Result<User[]>> {
+  try {
+    const response = await axios.get('/user');
+    return { success: true, value: response.data }
+  } catch (error) {
+    return { success: false, error: getErrorMessage((error as AxiosError).status)}
+  }
+}
