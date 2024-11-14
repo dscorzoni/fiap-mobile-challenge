@@ -68,7 +68,7 @@ export default function RedeStudent() {
                 id={student.id}
                 username={student.username}
                 email={student.email}
-                editAction={() => router.push(`/rede/edit-user?userId=${student.id}`)}
+                editAction={() => router.push(`/rede/edit-user?email=${student.email}`)}
                 deleteAction={() => handleDelete(student.id)}
               />
             )
@@ -76,7 +76,7 @@ export default function RedeStudent() {
           }
         </ScrollView>
       </View>
-      <Button title='Voltar' styleType="secondary" onPress={() => router.back()} />
+      <Button title='Voltar' styleType="secondary" onPress={() => router.replace('/home')} />
     </View>
   );
 }
