@@ -5,33 +5,29 @@ import { router } from 'expo-router';
 import Button from '@/components/Button';
 import ManageUserItem from '@/components/ManageUserItem';
 import { useAuthContext } from '@/contexts/auth';
-
-const students = [
-  {
-    id: "1",
-    username: "user1",
-    email: "user1@mail.com"
-  },
-  {
-    id: "2",
-    username: "user2",
-    email: "user1@mail.com"
-  },
-  {
-    id: "3",
-    username: "user3",
-    email: "user1@mail.com"
-  },
-  {
-    id: "4",
-    username: "user4",
-    email: "user1@mail.com"
-  },
-]
+import { useEffect, useState } from 'react';
+import { User } from '@/types/users';
+import { getUserList } from '@/api/user/userService';
 
 export default function RedeStudent() {
-
+  const [students, setStudents] = useState<User[]>();
   const auth = useAuthContext()
+
+  const fetchStudents = async () => {
+    const students = await getUserList('student');
+    if (!students) {
+      router.replace("/login");
+    } else {
+      setStudents(students);
+    }
+  }
+
+  useEffect(() => {
+    if(auth) {
+      fetchStudents();
+    }
+  }); 
+
   if (auth.user?.role === 'student') {
     router.replace("/")
   }
@@ -65,7 +61,7 @@ export default function RedeStudent() {
             paddingLeft: 10
             }}>
           {
-          students.map((student) => {
+          students?.map((student) => {
             return (
               <ManageUserItem
                 key={student.id}
