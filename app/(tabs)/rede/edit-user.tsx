@@ -34,7 +34,7 @@ export default function RedeEditUser() {
     <View style={styles.container}>
       <Header name={`Editar ${roleLabel}`} />
       <UserForm role={role} initialValues={user} />
-      <Button title='Voltar' onPress={() => router.back()} />
+      <Button styleType="secondary" title='Voltar' onPress={() => router.back()} />
     </View>
   )
 }

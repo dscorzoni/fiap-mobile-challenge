@@ -15,7 +15,7 @@ export default function RedeNewUser() {
     <View style={styles.container}>
       <Header name={`Novo(a) ${roleLabel}`} />
       <UserForm role={role} />
-      <Button title="Voltar" onPress={() => router.back()} />
+      <Button styleType="secondary" title="Voltar" onPress={() => router.back()} />
     </View>
   );
 }
