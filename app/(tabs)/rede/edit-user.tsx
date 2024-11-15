@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 import Header from '@/components/Header'
 import { Colors } from '@/constants/Colors'
@@ -10,17 +10,16 @@ import { useAuthContext } from '@/contexts/auth'
 import { getUserById } from '@/api/user/userService'
 
 export default function RedeEditUser() {
-  const { role, email } = useLocalSearchParams<{
-    role: Role
+  const { email } = useLocalSearchParams<{
     email: string
   }>()
+  const { role } = useLocalSearchParams<{ role: Role }>()
   const [user, setUser] = useState<User>()
   const auth = useAuthContext()
+  const roleLabel = role === 'teacher' ? 'Professor' : 'Aluno'
   const fetchUsers = async () => {
     const user = await getUserById(email)
-    if (!user) {
-      router.replace('/login')
-    } else {
+    if (user) {
       setUser(user)
     }
   }
@@ -30,8 +29,6 @@ export default function RedeEditUser() {
       fetchUsers()
     }
   })
-
-  const roleLabel = user?.role === 'teacher' ? 'Professor' : 'Aluno'
 
   return (
     <View style={styles.container}>

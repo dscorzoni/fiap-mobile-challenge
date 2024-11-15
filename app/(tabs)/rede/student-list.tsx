@@ -7,7 +7,7 @@ import ManageUserItem from '@/components/ManageUserItem';
 import { useAuthContext } from '@/contexts/auth';
 import { useEffect, useState } from 'react';
 import { User } from '@/types/users';
-import { getUserList } from '@/api/user/userService';
+import { deleteUser, getUserList } from '@/api/user/userService';
 
 export default function RedeStudent() {
   const [students, setStudents] = useState<User[]>();
@@ -26,19 +26,19 @@ export default function RedeStudent() {
     if(auth) {
       fetchStudents();
     }
-  }); 
+  });  
 
   if (auth.user?.role === 'student') {
     router.replace("/")
   }
 
-  function handleDelete(userId: string | undefined) {
-    if (userId) {
+  function handleDelete(email: string ) {
+    if (email) {
       Alert.alert(
         "Apagar estudante?",
         "Você tem certeza que deseja apagar este(a) estudante?",
         [
-          { text: "Apagar", onPress: () => Alert.alert(`TODO: Delete user ${userId} function.`) },
+          { text: "Apagar", onPress: () => deleteUser(email) },
           { text: "Cancelar", onPress: () => null },
         ]
       );
@@ -68,8 +68,8 @@ export default function RedeStudent() {
                 id={student.id}
                 username={student.username}
                 email={student.email}
-                editAction={() => router.push(`/rede/edit-user?email=${student.email}`)}
-                deleteAction={() => handleDelete(student.id)}
+                editAction={() => router.push(`/rede/edit-user?email=${student.email}&&role=student`)}
+                deleteAction={() => handleDelete(student.email)}
               />
             )
           })

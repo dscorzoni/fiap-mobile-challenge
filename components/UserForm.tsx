@@ -3,19 +3,21 @@ import { Role, User } from '@/types'
 import React, { useState } from 'react'
 import Button from './Button'
 import { createUser, updateUser } from '@/api/user/userService'
-import { router } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 
 interface Props {
   role: Role
   initialValues?: User
 }
 
-export default function UserForm({ role, initialValues }: Props) {
+export default function UserForm({initialValues }: Props) {
+  const { role } = useLocalSearchParams<{ role: Role }>();
   const [userData, setUserData] = useState<User>()
   const isEdit = initialValues ? true : false
-  const typeOfIteration = !isEdit ? userData?.role : initialValues?.role
-  const roleLabel = typeOfIteration === 'teacher' ? 'Professor(a)' : 'Estudante'
-  const nextRoute = typeOfIteration === 'teacher' ? '/rede/teacher-list' : '/rede/student-list'
+  const infoUser = {
+    label: role === 'teacher' ? 'Professor(a)' : 'Estudante',
+    route: '/rede/' + (role === 'teacher' ? 'teacher-list' : 'student-list'),
+  }
   const handleInputChange = (name: string, value: string) => {
     setUserData({
       ...userData,
@@ -32,18 +34,18 @@ export default function UserForm({ role, initialValues }: Props) {
           role: role,
         })
         if (response.success) {
-          Alert.alert(`${roleLabel} criado com sucesso!`)
-          router.replace(nextRoute)
+          Alert.alert(`${infoUser.label} criado com sucesso!`)
+          router.replace(infoUser.route)
         } else {
-          Alert.alert(`Ocorreu um problema ao tentar criar ${roleLabel}`)
+          Alert.alert(`Ocorreu um problema ao tentar criar ${infoUser.label}`)
         }
       } else if (initialValues && userData) {
         const response = await updateUser(initialValues.email, userData)
         if (response.success) {
-          Alert.alert(`${roleLabel} editado com sucesso!`)
-          router.replace(nextRoute)
+          Alert.alert(`${infoUser.label} editado com sucesso!`)
+          router.replace(infoUser.route)
         } else {
-          Alert.alert(`Ocorreu um problema ao tentar editar ${roleLabel}`)
+          Alert.alert(`Ocorreu um problema ao tentar editar ${infoUser.label}`)
         }
       }
     } catch (error) {

@@ -7,7 +7,7 @@ import ManageUserItem from '@/components/ManageUserItem';
 import { useAuthContext } from '@/contexts/auth';
 import { useEffect, useState } from 'react';
 import { User } from '@/types/users';
-import { getUserList } from '@/api/user/userService';
+import { deleteUser, getUserList } from '@/api/user/userService';
 
 export default function RedeTeacher() {
   const [teachers, setTeachers] = useState<User[]>();
@@ -32,13 +32,13 @@ export default function RedeTeacher() {
     router.replace("/")
   }
 
-  function handleDelete(userId: string | undefined) {
-    if (userId) {
+  function handleDelete(email: string) {
+    if (email) {
       Alert.alert(
         "Apagar professor(a)?",
         "Você tem certeza que deseja apagar este(a) professor(a)?",
         [
-          { text: "Apagar", onPress: () => Alert.alert(`TODO: Delete user ${userId} function.`) },
+          { text: "Apagar", onPress: () => deleteUser(email) },
           { text: "Cancelar", onPress: () => null },
         ]
       );
@@ -68,8 +68,8 @@ export default function RedeTeacher() {
                 id={teacher.id}
                 username={teacher.username}
                 email={teacher.email}
-                editAction={() => router.push(`/rede/edit-user?email=${teacher.email}`)}
-                deleteAction={() => handleDelete(teacher.id)}
+                editAction={() => router.push(`/rede/edit-user?email=${teacher.email}&&role=teacher`)}
+                deleteAction={() => handleDelete(teacher.email)}
               />
             )
           })

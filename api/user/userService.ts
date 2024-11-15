@@ -26,6 +26,15 @@ export async function updateUser(email: string, body: User): Promise<Result<User
     return { success: false, error: getErrorMessage((error as AxiosError).status)}
   }
 }
+
+export async function deleteUser(email: string): Promise<Result<void>> {
+  try {
+    await axios.delete(`/user?email=${email}`);
+    return { success: true, value: undefined }
+  } catch (error) {
+    return { success: false, error: getErrorMessage((error as AxiosError).status)}
+  }
+}
 export async function getUserList(role: string) {
   try {
     const response = await axios.get(`/user/users?role=${role}`);
