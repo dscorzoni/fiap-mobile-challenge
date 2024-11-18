@@ -23,7 +23,7 @@ export default function Index() {
     if (user) {
       fetchPosts()
     }
-  }, [user])
+  }, [user, posts])
 
   useEffect(() => {
     if (posts) {
