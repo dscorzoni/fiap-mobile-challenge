@@ -101,6 +101,7 @@ export default function Index() {
                 <Button
                   styleType='primary'
                   title='Continuar a leitura'
+                  icon="reader"
                   onPress={() =>
                     router.navigate(`/posts/detail?postId=${post.id}`)
                   }
@@ -109,6 +110,7 @@ export default function Index() {
                   <Button
                     styleType='secondary'
                     title='Editar postagem'
+                    icon="create"
                     onPress={() =>
                       router.navigate(`/posts/edit?postId=${post.id}`)
                     }
