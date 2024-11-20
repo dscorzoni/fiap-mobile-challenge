@@ -22,13 +22,15 @@ export default function InputText({
       placeholder={placeholder}
       onChangeText={onChange}
       autoCapitalize="none"
+      placeholderTextColor={Colors.primary}
     />
   );
 }
 
 const styles = StyleSheet.create({
   inputText: {
-    backgroundColor: Colors.lightGrey,
+    color: Colors.primary,
+    backgroundColor: Colors.lightYellow,
     paddingVertical: 12,
     marginTop: 10,
     width: "90%",
@@ -37,6 +39,6 @@ const styles = StyleSheet.create({
     // borderTopLeftRadius: 10,
     // borderTopRightRadius: 10,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.darkGrey,
+    borderBottomColor: Colors.primary,
   },
 });

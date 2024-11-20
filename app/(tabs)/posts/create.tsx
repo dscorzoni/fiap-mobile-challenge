@@ -16,6 +16,7 @@ import { useState } from 'react'
 import { PostData } from '@/types'
 import { useAuthContext } from '@/contexts/auth'
 import { createPost } from '@/api/posts'
+import { Ionicons } from '@expo/vector-icons'
 
 export default function CreatePost() {
   const [post, setPost] = useState<PostData>()
@@ -74,6 +75,7 @@ export default function CreatePost() {
         placeholder='Título'
         value={post?.title || ''}
         onChangeText={(text) => handleInputChange('title', text)}
+        placeholderTextColor={Colors.primary}
       />
       <TextInput
         style={styles.textarea}
@@ -82,8 +84,10 @@ export default function CreatePost() {
         onChangeText={(text) => handleInputChange('content', text)}
         multiline
         numberOfLines={4}
+        placeholderTextColor={Colors.primary}
       />
       <TouchableOpacity onPress={handleImageUpload} style={styles.uploadButton}>
+        <Ionicons name="cloud-upload" style={styles.icon} />
         <Text style={styles.uploadButtonText}>Anexar imagem</Text>
       </TouchableOpacity>
       {imagePreview && (
@@ -97,6 +101,7 @@ export default function CreatePost() {
       />
       <Button
         icon='arrow-back-circle'
+        styleType='secondary'
         title='Voltar'
         onPress={() => router.back()}
       />
@@ -110,34 +115,64 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: 120,
   },
   text: {
     fontSize: 20,
     marginBottom: 20,
   },
   input: {
-    width: '80%',
-    padding: 10,
-    marginVertical: 10,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
+    // width: '80%',
+    // padding: 10,
+    // marginVertical: 10,
+    // borderColor: 'gray',
+    // borderWidth: 1,
+    // borderRadius: 5,
+    color: Colors.primary,
+    backgroundColor: Colors.lightYellow,
+    padding: 12,
+    marginTop: 10,
+    width: "90%",
+    fontSize: 16,
+    // borderTopLeftRadius: 10,
+    // borderTopRightRadius: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.primary,
   },
   textarea: {
-    width: '80%',
-    padding: 10,
-    marginVertical: 10,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
+    // width: '80%',
+    // padding: 10,
+    // marginVertical: 10,
+    // borderColor: 'gray',
+    // borderWidth: 1,
+    // borderRadius: 5,
+    // height: 250,
+    // textAlignVertical: 'top',
+    color: Colors.primary,
+    backgroundColor: Colors.lightYellow,
+    padding: 12,
+    marginTop: 10,
+    width: "90%",
     height: 250,
-    textAlignVertical: 'top',
+    textAlign: "left",
+    textAlignVertical: "top",
+    fontSize: 16,
+    // borderTopLeftRadius: 10,
+    // borderTopRightRadius: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.primary,
   },
   uploadButton: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 15,
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: Colors.uploadButton,
     padding: 10,
     borderRadius: 5,
     marginVertical: 10,
+    width: "90%"
   },
   uploadButtonText: {
     color: Colors.white,

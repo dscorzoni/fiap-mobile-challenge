@@ -1,4 +1,5 @@
 import { Colors } from '@/constants/Colors'
+import { Ionicons } from '@expo/vector-icons'
 import { TextInput, View, StyleSheet } from 'react-native'
 
 interface Props {
@@ -9,23 +10,47 @@ interface Props {
 
 export default function SearchField({ searchText, setSearchText, placeholder }: Props) {
   return (
-    <View>
-      <TextInput
-        style={styles.input}
-        placeholder={placeholder}
-        value={searchText}
-        onChangeText={setSearchText}
-      />
+    <View style={styles.container}>
+      <View style={styles.inputArea}>
+        <Ionicons name="search" style={styles.icon} />
+        <TextInput
+          style={styles.textInput}
+          placeholder={placeholder}
+          value={searchText}
+          onChangeText={setSearchText}
+          placeholderTextColor={Colors.primary}
+        />
+      </View>
     </View>
   )
 }
 const styles = StyleSheet.create({
-  input: {
-    width: '100%',
-    padding: 10,
-    marginVertical: 10,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
+  container: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent:"center"
   },
+  inputArea: {
+    width: '100%',
+    marginTop: 15,
+    paddingHorizontal: 12,
+    // textAlign: "center",
+    borderRadius: 50,
+    backgroundColor: Colors.lightYellow,
+    borderWidth: 1,
+    borderColor: Colors.primary,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 20
+  },
+  textInput: {
+    width: "80%",
+    color: Colors.primary,
+    paddingVertical: 12,
+  },
+  icon: {
+    fontSize: 30,
+    color: Colors.primary
+  }
 })

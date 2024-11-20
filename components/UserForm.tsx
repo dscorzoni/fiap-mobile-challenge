@@ -1,9 +1,10 @@
-import { StyleSheet, TextInput, Alert, Text } from "react-native";
+import { StyleSheet, TextInput, Alert, View } from "react-native";
 import { Role, User } from "@/types";
 import React, { useState } from "react";
 import Button from "./Button";
 import { createUser, updateUser } from "@/api/user/userService";
 import { Href, router, useLocalSearchParams } from "expo-router";
+import { Colors } from "@/constants/Colors";
 
 interface Props {
   role: Role;
@@ -82,6 +83,7 @@ export default function UserForm({ initialValues }: Props) {
         placeholder="Nome"
         defaultValue={initialValues?.username}
         onChangeText={(text) => handleInputChange("username", text)}
+        placeholderTextColor={Colors.primary}
       ></TextInput>
       <TextInput
         autoCapitalize="none"
@@ -90,6 +92,7 @@ export default function UserForm({ initialValues }: Props) {
         placeholder="Email"
         defaultValue={initialValues?.email}
         onChangeText={(text) => handleInputChange("email", text)}
+        placeholderTextColor={Colors.primary}
       ></TextInput>
       {!initialValues && (
         <TextInput
@@ -98,6 +101,7 @@ export default function UserForm({ initialValues }: Props) {
           placeholder="Senha"
           secureTextEntry={true}
           onChangeText={(text) => handleInputChange("password", text)}
+          placeholderTextColor={Colors.primary}
         ></TextInput>
       )}
       {!initialValues && (
@@ -107,6 +111,7 @@ export default function UserForm({ initialValues }: Props) {
           placeholder="Confirmar Senha"
           secureTextEntry={true}
           onChangeText={(text) => setConfirmPassword(text)}
+          placeholderTextColor={Colors.primary}
         ></TextInput>
       )}
       {initialValues && (
@@ -116,6 +121,7 @@ export default function UserForm({ initialValues }: Props) {
           placeholder="Nova Senha"
           secureTextEntry={true}
           onChangeText={(text) => handleInputChange("password", text)}
+          placeholderTextColor={Colors.primary}
         ></TextInput>
       )}
       {initialValues && (
@@ -125,13 +131,15 @@ export default function UserForm({ initialValues }: Props) {
           placeholder="Confirmar Senha"
           secureTextEntry={true}
           onChangeText={(text) => setConfirmPassword(text)}
+          placeholderTextColor={Colors.primary}
         ></TextInput>
       )}
-
+      <View style={{ marginTop: 20 }} />
       <Button
         title="Salvar"
         isDisabled={validateSaveBtn()}
         onPress={handleSave}
+        icon="save"
       ></Button>
     </>
   );
@@ -146,11 +154,19 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   input: {
-    width: "80%",
-    padding: 10,
-    marginVertical: 10,
-    borderColor: "gray",
-    borderWidth: 1,
-    borderRadius: 5,
+    // width: "80%",
+    // padding: 10,
+    // marginVertical: 10,
+    // borderColor: "gray",
+    // borderWidth: 1,
+    // borderRadius: 5,
+    color: Colors.primary,
+    backgroundColor: Colors.lightYellow,
+    padding: 12,
+    marginTop: 10,
+    width: "90%",
+    fontSize: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.primary,
   },
 });

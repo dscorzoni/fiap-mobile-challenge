@@ -11,6 +11,7 @@ import { useAuthContext } from '@/contexts/auth'
 import { formatDate } from '@/api/utils/dates'
 import { useHandleScroll } from '@/api/utils/handleScroll'
 import SearchField from '@/components/SearchField/SearchField'
+import AddButton from '@/components/AddButton'
 export default function Index() {
   const [posts, setPosts] = useState<PostData[]>()
   const { user } = useAuthContext()
@@ -22,7 +23,7 @@ export default function Index() {
     if (user) {
       fetchPosts()
     }
-  }, [user])
+  }, [user, posts])
 
   useEffect(() => {
     if (posts) {
@@ -55,9 +56,9 @@ export default function Index() {
         <SearchField
           searchText={searchText}
           setSearchText={setSearchText}
-          placeholder='Digite o título do post'
+          placeholder='Busque pelo título do post'
         ></SearchField>
-        {(user?.role === 'admin' || user?.role === 'teacher') && (
+        {/* {(user?.role === 'admin' || user?.role === 'teacher') && (
           <View style={styles.newPost}>
             <Button
               icon='add'
@@ -66,7 +67,7 @@ export default function Index() {
               onPress={() => router.navigate('/posts/create')}
             ></Button>
           </View>
-        )}
+        )} */}
 
         {filteredPosts &&
           filteredPosts.map((post) => (
@@ -100,6 +101,7 @@ export default function Index() {
                 <Button
                   styleType='primary'
                   title='Continuar a leitura'
+                  icon="reader"
                   onPress={() =>
                     router.navigate(`/posts/detail?postId=${post.id}`)
                   }
@@ -108,6 +110,7 @@ export default function Index() {
                   <Button
                     styleType='secondary'
                     title='Editar postagem'
+                    icon="create"
                     onPress={() =>
                       router.navigate(`/posts/edit?postId=${post.id}`)
                     }
@@ -117,6 +120,10 @@ export default function Index() {
             </View>
           ))}
       </ScrollView>
+      {(user?.role === 'admin' || user?.role === 'teacher') && (
+        <AddButton onPress={() => router.navigate('/posts/create')} />
+      )}
+      
     </View>
   )
 }
@@ -125,7 +132,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-    paddingTop: 100,
+    paddingTop: 110,
     padding: 10,
   },
   contentContainer: {
@@ -135,7 +142,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   text: {
-    paddingTop: 40,
+    paddingTop: 20,
     color: Colors.primary,
     fontWeight: 'bold',
     fontSize: 17,

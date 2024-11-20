@@ -143,9 +143,10 @@ export default function PostEdit() {
       <Button
         icon='arrow-back-circle'
         title='Voltar'
+        styleType="secondary"
         onPress={() => router.back()}
       />
-      <Button icon='trash' title='Deletar' onPress={handleDelete} />
+      <Button icon='trash' styleType="secondary" title='Deletar' onPress={handleDelete} />
     </View>
   )
 }
@@ -156,29 +157,37 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 100,
+    paddingTop: 110,
+    gap: 5
   },
   text: {
     fontSize: 20,
     marginBottom: 20,
   },
   input: {
-    width: '80%',
-    padding: 10,
-    marginVertical: 10,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
+    color: Colors.primary,
+    backgroundColor: Colors.lightYellow,
+    padding: 12,
+    marginTop: 10,
+    width: "90%",
+    fontSize: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.primary,
   },
   textarea: {
-    width: '80%',
-    padding: 10,
-    marginVertical: 10,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
+    color: Colors.primary,
+    backgroundColor: Colors.lightYellow,
+    padding: 12,
+    marginTop: 10,
+    width: "90%",
     height: 250,
-    textAlignVertical: 'top',
+    textAlign: "left",
+    textAlignVertical: "top",
+    fontSize: 16,
+    // borderTopLeftRadius: 10,
+    // borderTopRightRadius: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.primary,
   },
   uploadButton: {
     backgroundColor: Colors.uploadButton,
