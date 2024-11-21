@@ -42,12 +42,12 @@ export default function CreatePost() {
         allowsEditing: true,
         aspect: [4, 3],
         quality: 1,
+        base64: true,
       })
-
       if (!result.canceled && result.assets && result.assets.length > 0) {
-        const uri = result.assets[0].uri
-        setImagePreview(uri)
-        setPost({ ...post, image: uri } as PostData)
+        const base64Image = `data:image/jpeg;base64,${result.assets[0].base64}`
+        setImagePreview(base64Image)
+        setPost({ ...post, image: base64Image } as PostData)
       }
     } catch (error) {
       console.error('Erro ao carregar imagem', error)
