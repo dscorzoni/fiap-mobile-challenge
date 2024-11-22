@@ -67,6 +67,11 @@ export default function CreatePost() {
     }
   };
 
+  const handleRemoveImage = () => {
+    setImagePreview(null);
+    setPost({ ...post, image: "" } as PostData);
+  };
+
   return (
     <View style={styles.container}>
       <Header name={`Criar Post`} />
@@ -91,7 +96,15 @@ export default function CreatePost() {
         <Text style={styles.uploadButtonText}>Anexar imagem</Text>
       </TouchableOpacity>
       {imagePreview && (
-        <Image source={{ uri: imagePreview }} style={styles.imagePreview} />
+        <View>
+          <TouchableOpacity
+            onPress={handleRemoveImage}
+            style={styles.removeImageButton}
+          >
+            <Ionicons name="close-circle-outline" style={{ fontSize: 28 }} />
+          </TouchableOpacity>
+          <Image source={{ uri: imagePreview }} style={styles.imagePreview} />
+        </View>
       )}
       <Button
         icon="save"
@@ -115,7 +128,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: 120,
+    padding: 20,
   },
   text: {
     fontSize: 20,
@@ -126,7 +139,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.lightYellow,
     padding: 12,
     marginTop: 10,
-    width: "90%",
+    width: "100%",
     fontSize: 16,
     borderBottomWidth: 1,
     borderBottomColor: Colors.primary,
@@ -136,7 +149,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.lightYellow,
     padding: 12,
     marginTop: 10,
-    width: "90%",
+    width: "100%",
     height: 250,
     textAlign: "left",
     textAlignVertical: "top",
@@ -154,11 +167,26 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     marginVertical: 10,
-    width: "90%",
+    width: "100%",
   },
   uploadButtonText: {
     color: Colors.white,
     textAlign: "center",
+  },
+  removeImageButton: {
+    position: "absolute",
+    top: -15,
+    right: -25,
+    margin: 10,
+    padding: 5,
+    opacity: 0.8,
+    borderRadius: 50,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1,
+    color: Colors.darkGrey,
+    backgroundColor: Colors.white,
   },
   imagePreview: {
     width: 100,

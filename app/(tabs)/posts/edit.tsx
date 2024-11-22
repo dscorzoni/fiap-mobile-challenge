@@ -11,7 +11,7 @@ import {
 import { router, useLocalSearchParams } from "expo-router";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuthContext } from "@/contexts/auth";
 import { PostData } from "@/types";
 import { getPostsById, updatePost, deletePost } from "@/api/posts";
@@ -115,6 +115,11 @@ export default function PostEdit() {
     }
   };
 
+  const handleRemoveImage = () => {
+    setImagePreview(null);
+    setPost({ ...post, image: "" } as PostData);
+  };
+
   const hasChanges = JSON.stringify(post) !== JSON.stringify(initialPost);
 
   return (
@@ -147,7 +152,15 @@ export default function PostEdit() {
           <Text style={styles.uploadButtonText}>Anexar imagem</Text>
         </TouchableOpacity>
         {imagePreview && (
-          <Image source={{ uri: imagePreview }} style={styles.imagePreview} />
+          <View>
+            <TouchableOpacity
+              onPress={handleRemoveImage}
+              style={styles.removeImageButton}
+            >
+              <Ionicons name="close-circle-outline" style={{ fontSize: 28 }} />
+            </TouchableOpacity>
+            <Image source={{ uri: imagePreview }} style={styles.imagePreview} />
+          </View>
         )}
         <Button
           icon="save"
@@ -225,6 +238,21 @@ const styles = StyleSheet.create({
   uploadButtonText: {
     color: Colors.white,
     textAlign: "center",
+  },
+  removeImageButton: {
+    position: "absolute",
+    top: -15,
+    right: -25,
+    margin: 10,
+    padding: 5,
+    opacity: 0.8,
+    borderRadius: 50,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1,
+    color: Colors.darkGrey,
+    backgroundColor: Colors.white,
   },
   imagePreview: {
     width: 100,
