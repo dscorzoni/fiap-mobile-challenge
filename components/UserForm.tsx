@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.lightYellow,
     padding: 12,
     marginTop: 10,
-    width: "90%",
+    width: "100%",
     fontSize: 16,
     borderBottomWidth: 1,
     borderBottomColor: Colors.primary,

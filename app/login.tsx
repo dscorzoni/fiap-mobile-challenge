@@ -54,16 +54,15 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 20,
   },
   icon: {
     color: Colors.primary,
-    padding: 16,
-    marginBottom: 36,
+    paddingBottom: 16,
   },
   forgotPassword: {
-    width: "85%",
-    textAlign: "right",
-    paddingTop: 16,
+    paddingTop: 10,
     textDecorationLine: "underline",
+    marginLeft: "auto",
   },
 });

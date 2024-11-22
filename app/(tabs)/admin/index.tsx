@@ -1,4 +1,11 @@
-import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import Header from "@/components/Header";
 import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
@@ -11,7 +18,6 @@ import { deletePost, getPosts } from "@/api/posts";
 import { formatDate } from "@/api/utils/dates";
 
 export default function Admin() {
-
   const [posts, setPosts] = useState<PostData[]>();
   const user = useAuthContext();
 
@@ -41,80 +47,85 @@ export default function Admin() {
         ]
       );
     }
-  };
+  }
 
   return (
     <View style={styles.container}>
-      <Header name="Admin" />
-      <Text style={styles.text}>Gerenciamento de Usuários</Text>
-      <View style={styles.userAdmin}>
-        <AdminButton
-          title={"Gerenciar Professores"}
-          icon={"briefcase"}
-          onPress={() => router.push(`/(tabs)/rede/teacher-list`)}
-        />
-        <AdminButton
-          title={"Gerenciar Estudantes"}
-          icon={"people"}
-          onPress={() => router.push(`/(tabs)/rede/student-list`)}
-        />
+      <View style={styles.contentContainer}>
+        <Header name="Admin" />
+        <Text style={styles.text}>Gerenciamento de Usuários</Text>
+        <View style={styles.userAdmin}>
+          <AdminButton
+            title={"Gerenciar Professores"}
+            icon={"briefcase"}
+            onPress={() => router.push(`/(tabs)/rede/teacher-list`)}
+          />
+          <AdminButton
+            title={"Gerenciar Estudantes"}
+            icon={"people"}
+            onPress={() => router.push(`/(tabs)/rede/student-list`)}
+          />
+        </View>
+
+        <Text style={styles.text}>Gerenciamento de Posts</Text>
       </View>
 
-      <Text style={styles.text}>Gerenciamento de Posts</Text>
-
-      <View style={{
-        maxHeight: "60%",
-        paddingTop: 10,
-      }}>
-        <ScrollView
-          showsVerticalScrollIndicator={true}
-          style={{
-            paddingLeft: 10,
-          }}
-        >
-          <View style={styles.postsContainer}>
-            {
-            posts === undefined ?
-              <Text>Não há postagens a serem mostradas.</Text> :
-              posts.map((post) => (
-                <AdminItem
-                  key={post.id}
-                  postId={post.id}
-                  authorName={post.user.username}
-                  postTitle={post.title}
-                  postDate={formatDate(String(post.date))}
-                  showItem={() => router.navigate(`/posts/detail?postId=${post.id}`)}
-                  editAction={() => router.push(`/(tabs)/posts/edit?postId=${post.id}`)}
-                  deleteAction={() => handleDelete(post.id)}
-                />
-              ))
-            }
-          </View>
+      <View style={styles.postsContainer}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {posts === undefined ? (
+            <Text>Não há postagens a serem mostradas.</Text>
+          ) : (
+            posts.map((post) => (
+              <AdminItem
+                key={post.id}
+                postId={post.id}
+                authorName={post.user.username}
+                postTitle={post.title}
+                postDate={formatDate(String(post.date))}
+                showItem={() =>
+                  router.navigate(`/posts/detail?postId=${post.id}`)
+                }
+                editAction={() =>
+                  router.push(`/(tabs)/posts/edit?postId=${post.id}`)
+                }
+                deleteAction={() => handleDelete(post.id)}
+              />
+            ))
+          )}
         </ScrollView>
       </View>
     </View>
   );
 }
 
+const { height } = Dimensions.get("window");
+const tabHeight = 110;
+const coreHeight = 320;
+const postsHeight = height - tabHeight - coreHeight - 20;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 120,
     backgroundColor: Colors.background,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  contentContainer: {
     alignItems: "center",
     justifyContent: "center",
   },
   text: {
     color: Colors.primary,
-    fontSize: 20
+    fontSize: 20,
   },
   postsContainer: {
-    marginTop: 10
+    marginVertical: 10,
+    height: postsHeight,
   },
   userAdmin: {
     display: "flex",
     flexDirection: "row",
     gap: 20,
-    paddingVertical: 20
-  }
+    paddingVertical: 20,
+  },
 });

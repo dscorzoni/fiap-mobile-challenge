@@ -20,25 +20,31 @@ export default function Rede() {
   return (
     <View style={styles.container}>
       <Header name="Rede" />
-      <Text style={styles.text}>Rede Screen</Text>
-      <Button
-        title="Gerenciar Professores"
-        onPress={() => router.push(`/rede/teacher-list`)}
-      />
-      <Button
-        title="Gerenciar Alunos"
-        onPress={() => router.push(`/rede/student-list`)}
-      />
+      <View style={styles.contentContainer}>
+        <Text style={styles.text}>Rede Screen</Text>
+        <Button
+          title="Gerenciar Professores"
+          onPress={() => router.push(`/rede/teacher-list`)}
+        />
+        <Button
+          title="Gerenciar Alunos"
+          onPress={() => router.push(`/rede/student-list`)}
+        />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    padding: 20,
     flex: 1,
     backgroundColor: Colors.background,
-    alignItems: "center",
     justifyContent: "center",
+  },
+  contentContainer: {
+    justifyContent: "center",
+    alignItems: "center",
   },
   text: {
     color: Colors.primary,
