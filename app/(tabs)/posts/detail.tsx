@@ -15,11 +15,12 @@ export default function PostDetail() {
   const { postId } = useLocalSearchParams<{ postId: string }>();
   const [post, setPosts] = useState<PostData>();
   const { handleScroll } = useHandleScroll();
+
   useEffect(() => {
-    if (user) {
+    if (user && postId) {
       fetchPostById();
     }
-  }, [user]);
+  }, [user, postId]);
 
   const fetchPostById = async () => {
     const post = await getPostsById(postId);

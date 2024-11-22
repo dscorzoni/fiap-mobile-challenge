@@ -122,9 +122,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     padding: 20,
   },
-  contentContainer: {
-    padding: 10,
-  },
+  contentContainer: {},
   postContainer: {
     marginBottom: 20,
   },

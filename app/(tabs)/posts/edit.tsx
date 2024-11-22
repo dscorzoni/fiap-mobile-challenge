@@ -30,10 +30,10 @@ export default function PostEdit() {
   const { handleScroll } = useHandleScroll();
 
   useEffect(() => {
-    if (user) {
+    if (user && postId) {
       fetchPostById();
     }
-  }, [user]);
+  }, [user, postId]);
 
   const fetchPostById = async () => {
     const post = await getPostsById(postId);
@@ -42,6 +42,7 @@ export default function PostEdit() {
     } else {
       setPost(post);
       setInitialPost(post);
+      setImagePreview(post.image);
     }
   };
 
@@ -158,7 +159,7 @@ export default function PostEdit() {
           icon="arrow-back-circle"
           title="Voltar"
           styleType="secondary"
-          onPress={() => router.back()}
+          onPress={() => router.push("/posts/list")}
         />
         <Button
           icon="trash"
