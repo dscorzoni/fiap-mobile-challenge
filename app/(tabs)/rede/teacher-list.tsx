@@ -85,7 +85,7 @@ export default function RedeTeacher() {
       <Button
         title="Voltar"
         styleType="secondary"
-        onPress={() => router.replace("/home")}
+        onPress={() => router.replace("/home/posts-list")}
       />
     </View>
   );

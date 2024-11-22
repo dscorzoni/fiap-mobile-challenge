@@ -68,7 +68,7 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
     if (response.success) {
       await decodeToken();
-      router.push("/home");
+      router.push("/home/posts-list");
     } else {
       setError(response.error);
       Alert.alert(response.error, "Tente novamente");

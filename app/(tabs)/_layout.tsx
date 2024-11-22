@@ -41,19 +41,6 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="posts"
-        options={{
-          title: "Posts",
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? "book" : "book-outline"}
-              color={color}
-              size={24}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="rede"
         options={{
           title: "Rede",
@@ -79,6 +66,19 @@ export default function TabLayout() {
             />
           ),
           ...adminProps,
+        }}
+      />
+      <Tabs.Screen
+        name="perfil"
+        options={{
+          title: "Perfil",
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? "person" : "person-outline"}
+              color={color}
+              size={24}
+            />
+          ),
         }}
       />
     </Tabs>

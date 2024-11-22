@@ -6,6 +6,7 @@ export type PostData = {
   image?: string
   user: {
     username: string
+    email: string
   }
   user_id?: number
 }

@@ -4,7 +4,7 @@ import { useAuthContext } from "@/contexts/auth";
 
 export default function NotFoundScreen() {
   const { user } = useAuthContext();
-  const href = user ? "/home" : "/";
+  const href = user ? "/home/posts-list" : "/";
 
   return (
     <>

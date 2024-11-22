@@ -63,6 +63,16 @@ export default function PostDetail() {
             )}
             <Text style={styles.content}>{post.content}</Text>
             <View style={styles.actionBar}>
+              {(user?.email === post.user.email || user?.role === "admin") && (
+                <Button
+                  styleType="secondary"
+                  title="Editar postagem"
+                  icon="create"
+                  onPress={() =>
+                    router.navigate(`/home/edit-post?postId=${post.id}`)
+                  }
+                ></Button>
+              )}
               <Button
                 icon="arrow-back-circle"
                 styleType="primary"

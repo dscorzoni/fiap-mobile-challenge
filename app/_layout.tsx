@@ -12,7 +12,7 @@ export default function RootLayout() {
       if (!token) {
         router.replace("/"); // Redireciona para a tela de login se o token não estiver presente
       } else {
-        router.replace("/home");
+        router.replace("/home/posts-list");
       }
     };
     checkLoginStatus();

@@ -60,7 +60,7 @@ export default function CreatePost() {
       const response = await createPost(post as PostData);
       if (response) {
         Alert.alert("Post criado com sucesso!");
-        router.replace(`/posts/list`);
+        router.replace(`/home/posts-list`);
       }
     } catch (error) {
       console.error("Erro ao criar post", error);

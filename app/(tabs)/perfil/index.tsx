@@ -1,32 +1,31 @@
 import { StyleSheet, Text, View } from "react-native";
 import Header from "@/components/Header";
-import Button from "@/components/Button";
 import { Colors } from "@/constants/Colors";
-import { useAuthContext } from "@/contexts/auth";
 import { router } from "expo-router";
+import Button from "@/components/Button";
+import { useAuthContext } from "@/contexts/auth";
 
-export default function Home() {
+export default function Profile() {
   const { handleLogout, isLoading, user } = useAuthContext();
+  const isStudent = user?.role === "student";
 
   return (
     <View style={styles.container}>
-      <Header name="Home" />
+      <Header name="Perfil" />
+      <Text>email: {user?.email}</Text>
+      <Text>username: {user?.username}</Text>
       <View style={styles.contentContainer}>
-        <Button title="Posts" onPress={() => router.push(`/(tabs)/posts`)} />
-        {user?.role !== "student" && (
+        <Button
+          title="Editar Perfil"
+          onPress={() =>
+            router.push(`/perfil/edit-profile?email=${user?.email}`)
+          }
+        />
+        {!isStudent && (
           <Button
-            title="Professores"
-            onPress={() => router.push(`/(tabs)/rede/teacher-list`)}
+            title="Meus Posts"
+            onPress={() => router.push(`/perfil/my-posts?email=${user?.email}`)}
           />
-        )}
-        {user?.role !== "student" && (
-          <Button
-            title="Alunos"
-            onPress={() => router.push(`/(tabs)/rede/student-list`)}
-          />
-        )}
-        {user?.role === "admin" && (
-          <Button title="Admin" onPress={() => router.push(`/(tabs)/admin`)} />
         )}
         <Button
           title={isLoading ? "Saindo..." : "Sair"}
@@ -41,14 +40,14 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   container: {
+    padding: 20,
     flex: 1,
     backgroundColor: Colors.background,
-    padding: 20,
+    justifyContent: "center",
   },
   contentContainer: {
-    flex: 1,
-    alignItems: "center",
     justifyContent: "center",
+    alignItems: "center",
   },
   text: {
     color: Colors.primary,
