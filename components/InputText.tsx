@@ -33,12 +33,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.lightYellow,
     paddingVertical: 12,
     marginTop: 10,
-    width: "90%",
     textAlign: "center",
     fontSize: 16,
-    // borderTopLeftRadius: 10,
-    // borderTopRightRadius: 10,
     borderBottomWidth: 1,
+    width: "100%",
     borderBottomColor: Colors.primary,
   },
 });

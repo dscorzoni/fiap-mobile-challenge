@@ -15,7 +15,12 @@ export default function RedeNewUser() {
     <View style={styles.container}>
       <Header name={`Novo(a) ${roleLabel}`} />
       <UserForm role={role} />
-      <Button styleType="secondary" icon="arrow-back-circle" title="Voltar" onPress={() => router.back()} />
+      <Button
+        styleType="secondary"
+        icon="arrow-back-circle"
+        title="Voltar"
+        onPress={() => router.back()}
+      />
     </View>
   );
 }
@@ -26,6 +31,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     alignItems: "center",
     justifyContent: "center",
+    padding: 20,
   },
   text: {
     color: Colors.primary,

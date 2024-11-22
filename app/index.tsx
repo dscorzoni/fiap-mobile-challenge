@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 20,
   },
   text: {
     color: Colors.black,

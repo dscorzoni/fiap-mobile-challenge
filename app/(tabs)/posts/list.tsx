@@ -1,29 +1,29 @@
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
-import Header from '@/components/Header'
-import { Colors } from '@/constants/Colors'
-import { useEffect, useState } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { router } from 'expo-router'
-import { getPosts } from '@/api/posts'
-import Button from '@/components/Button'
-import { PostData } from '@/types/posts'
-import { useAuthContext } from '@/contexts/auth'
-import { formatDate } from '@/api/utils/dates'
-import { useHandleScroll } from '@/api/utils/handleScroll'
-import SearchField from '@/components/SearchField/SearchField'
-import AddButton from '@/components/AddButton'
+import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
+import Header from "@/components/Header";
+import { Colors } from "@/constants/Colors";
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
+import { getPosts } from "@/api/posts";
+import Button from "@/components/Button";
+import { PostData } from "@/types/posts";
+import { useAuthContext } from "@/contexts/auth";
+import { formatDate } from "@/api/utils/dates";
+import { useHandleScroll } from "@/api/utils/handleScroll";
+import SearchField from "@/components/SearchField/SearchField";
+import AddButton from "@/components/AddButton";
 export default function Index() {
-  const [posts, setPosts] = useState<PostData[]>()
-  const { user } = useAuthContext()
-  const { isTitleVisible, handleScroll } = useHandleScroll()
-  const [filteredPosts, setFilteredPosts] = useState<PostData[]>([])
-  const [searchText, setSearchText] = useState('')
+  const [posts, setPosts] = useState<PostData[]>();
+  const { user } = useAuthContext();
+  const { isTitleVisible, handleScroll } = useHandleScroll();
+  const [filteredPosts, setFilteredPosts] = useState<PostData[]>([]);
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     if (user) {
-      fetchPosts()
+      fetchPosts();
     }
-  }, [user, posts])
+  }, [user, posts]);
 
   useEffect(() => {
     if (posts) {
@@ -31,22 +31,22 @@ export default function Index() {
         posts.filter((post) =>
           post.title.toLowerCase().includes(searchText.toLowerCase())
         )
-      )
+      );
     }
-  }, [searchText, posts])
+  }, [searchText, posts]);
 
   const fetchPosts = async () => {
-    const posts = await getPosts()
+    const posts = await getPosts();
     if (!posts) {
-      router.replace('/login')
+      router.replace("/login");
     } else {
-      setPosts(posts)
+      setPosts(posts);
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
-      {isTitleVisible && <Header name='Lista de Posts' />}
+      {isTitleVisible && <Header name="Lista de Posts" />}
       <ScrollView
         contentContainerStyle={styles.contentContainer}
         onScroll={handleScroll}
@@ -56,25 +56,14 @@ export default function Index() {
         <SearchField
           searchText={searchText}
           setSearchText={setSearchText}
-          placeholder='Busque pelo título do post'
+          placeholder="Busque pelo título do post"
         ></SearchField>
-        {/* {(user?.role === 'admin' || user?.role === 'teacher') && (
-          <View style={styles.newPost}>
-            <Button
-              icon='add'
-              styleType='primary'
-              title='Nova postagem'
-              onPress={() => router.navigate('/posts/create')}
-            ></Button>
-          </View>
-        )} */}
-
         {filteredPosts &&
           filteredPosts.map((post) => (
             <View key={post.id} style={styles.postContainer}>
               <Text style={styles.text}>{post.title}</Text>
               <Text style={styles.paragraph}>
-                {formatDate(String(post.date))} - Por Professor(a){' '}
+                {formatDate(String(post.date))} - Por Professor(a){" "}
                 {post.user.username}
               </Text>
               {post.image && (
@@ -93,23 +82,23 @@ export default function Index() {
               <Text
                 style={styles.content}
                 numberOfLines={5}
-                ellipsizeMode='tail'
+                ellipsizeMode="tail"
               >
                 {post.content}
               </Text>
               <View style={styles.actionBar}>
                 <Button
-                  styleType='primary'
-                  title='Continuar a leitura'
+                  styleType="primary"
+                  title="Continuar a leitura"
                   icon="reader"
                   onPress={() =>
                     router.navigate(`/posts/detail?postId=${post.id}`)
                   }
                 ></Button>
-                {(user?.role === 'admin' || user?.role === 'teacher') && (
+                {(user?.role === "admin" || user?.role === "teacher") && (
                   <Button
-                    styleType='secondary'
-                    title='Editar postagem'
+                    styleType="secondary"
+                    title="Editar postagem"
                     icon="create"
                     onPress={() =>
                       router.navigate(`/posts/edit?postId=${post.id}`)
@@ -120,31 +109,27 @@ export default function Index() {
             </View>
           ))}
       </ScrollView>
-      {(user?.role === 'admin' || user?.role === 'teacher') && (
-        <AddButton onPress={() => router.navigate('/posts/create')} />
+      {(user?.role === "admin" || user?.role === "teacher") && (
+        <AddButton onPress={() => router.navigate("/posts/create")} />
       )}
-      
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-    paddingTop: 110,
-    padding: 10,
+    padding: 20,
   },
-  contentContainer: {
-    padding: 10,
-  },
+  contentContainer: {},
   postContainer: {
     marginBottom: 20,
   },
   text: {
     paddingTop: 20,
     color: Colors.primary,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 17,
   },
   content: {
@@ -164,17 +149,17 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.lightGrey,
   },
   imageContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
   },
   actionBar: {
     paddingTop: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
   newPost: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
   },
-})
+});

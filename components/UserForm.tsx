@@ -14,6 +14,8 @@ interface Props {
 export default function UserForm({ initialValues }: Props) {
   const { role } = useLocalSearchParams<{ role: Role }>();
   const [userData, setUserData] = useState<User>();
+  const [confirmPassword, setConfirmPassword] = useState<string>();
+
   const isEdit = initialValues ? true : false;
   const infoUser = {
     label: role === "teacher" ? "Professor(a)" : "Estudante",
@@ -45,7 +47,6 @@ export default function UserForm({ initialValues }: Props) {
     }
   };
 
-  const [confirmPassword, setConfirmPassword] = useState<string>();
   const handleSave = async () => {
     try {
       if (!isEdit && userData) {
@@ -59,7 +60,10 @@ export default function UserForm({ initialValues }: Props) {
           Alert.alert(`${infoUser.label} criado com sucesso!`);
           router.replace(infoUser.route as Href);
         } else {
-          Alert.alert(`Ocorreu um problema ao tentar criar ${infoUser.label}`);
+          Alert.alert(
+            `Ocorreu um problema ao tentar criar ${infoUser.label}`,
+            response.error
+          );
         }
       } else if (initialValues && userData) {
         const response = await updateUser(initialValues.email, userData);
@@ -67,7 +71,10 @@ export default function UserForm({ initialValues }: Props) {
           Alert.alert(`${infoUser.label} editado com sucesso!`);
           router.replace(infoUser.route as Href);
         } else {
-          Alert.alert(`Ocorreu um problema ao tentar editar ${infoUser.label}`);
+          Alert.alert(
+            `Ocorreu um problema ao tentar editar ${infoUser.label}`,
+            response.error
+          );
         }
       }
     } catch (error) {
@@ -154,17 +161,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   input: {
-    // width: "80%",
-    // padding: 10,
-    // marginVertical: 10,
-    // borderColor: "gray",
-    // borderWidth: 1,
-    // borderRadius: 5,
     color: Colors.primary,
     backgroundColor: Colors.lightYellow,
     padding: 12,
     marginTop: 10,
-    width: "90%",
+    width: "100%",
     fontSize: 16,
     borderBottomWidth: 1,
     borderBottomColor: Colors.primary,

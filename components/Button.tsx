@@ -62,7 +62,7 @@ const baseButton: ViewStyle = {
   justifyContent: "center",
   paddingVertical: 16,
   paddingHorizontal: 32,
-  width: "90%",
+  width: "100%",
   borderRadius: 5,
 };
 

@@ -11,30 +11,30 @@ export default function Home() {
   return (
     <View style={styles.container}>
       <Header name="Home" />
-      <Text style={styles.text}>Home Screen</Text>
-
-      <Button title="Posts" onPress={() => router.push(`/(tabs)/posts`)} />
-      {user?.role !== "student" && (
+      <View style={styles.contentContainer}>
+        <Button title="Posts" onPress={() => router.push(`/(tabs)/posts`)} />
+        {user?.role !== "student" && (
+          <Button
+            title="Professores"
+            onPress={() => router.push(`/(tabs)/rede/teacher-list`)}
+          />
+        )}
+        {user?.role !== "student" && (
+          <Button
+            title="Alunos"
+            onPress={() => router.push(`/(tabs)/rede/student-list`)}
+          />
+        )}
+        {user?.role === "admin" && (
+          <Button title="Admin" onPress={() => router.push(`/(tabs)/admin`)} />
+        )}
         <Button
-          title="Professores"
-          onPress={() => router.push(`/(tabs)/rede/teacher-list`)}
+          title={isLoading ? "Saindo..." : "Sair"}
+          icon="log-in"
+          onPress={handleLogout}
+          isDisabled={isLoading}
         />
-      )}
-      {user?.role !== "student" && (
-        <Button
-          title="Alunos"
-          onPress={() => router.push(`/(tabs)/rede/student-list`)}
-        />
-      )}
-      {user?.role === "admin" && (
-        <Button title="Admin" onPress={() => router.push(`/(tabs)/admin`)} />
-      )}
-      <Button
-        title={isLoading ? "Saindo..." : "Sair"}
-        icon="log-in"
-        onPress={handleLogout}
-        isDisabled={isLoading}
-      />
+      </View>
     </View>
   );
 }
@@ -43,6 +43,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
+    padding: 20,
+  },
+  contentContainer: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
