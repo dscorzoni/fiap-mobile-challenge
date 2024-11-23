@@ -43,8 +43,8 @@ export default function PostDetail() {
 
         {post && (
           <View key={post.id} style={styles.postContainer}>
-            <Text style={styles.text}>{post.title}</Text>
-            <Text style={styles.paragraph}>
+            <Text style={styles.title}>{post.title}</Text>
+            <Text style={styles.author}>
               {formatDate(String(post.date))} - Por Professor(a){" "}
               {post.user.username}
             </Text>
@@ -96,25 +96,30 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   postContainer: {},
-  text: {
+  title: {
+    paddingTop: 20,
     color: Colors.primary,
     fontWeight: "bold",
-    fontSize: 17,
+    fontSize: 20,
+    marginBottom: 5,
   },
   content: {
     color: Colors.defaultText,
     fontSize: 16,
   },
-  paragraph: {
+  author: {
     color: Colors.defaultText,
     fontSize: 14,
+    marginBottom: 10,
+    fontWeight: "bold",
   },
   image: {
     borderWidth: 1,
     borderColor: Colors.primary,
     width: 200,
     height: 200,
-    marginVertical: 10,
+    marginTop: 10,
+    marginBottom: 20,
     backgroundColor: Colors.lightGrey,
   },
   imageContainer: {
@@ -123,7 +128,8 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   actionBar: {
-    paddingTop: 10,
+    marginTop: 30,
     alignItems: "center",
+    gap: 10,
   },
 });

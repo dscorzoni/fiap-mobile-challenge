@@ -75,16 +75,18 @@ export default function Register() {
         />
 
         <View style={{ padding: 16 }} />
-        <Button
-          title={isLoading ? "Cadastrando..." : "Cadastrar"}
-          onPress={handleSubmit}
-          isDisabled={isLoading}
-        />
-        <Button
-          title="Voltar"
-          styleType="secondary"
-          onPress={() => router.push("/")}
-        />
+        <View style={{ gap: 10, width: "100%" }}>
+          <Button
+            title={isLoading ? "Cadastrando..." : "Cadastrar"}
+            onPress={handleSubmit}
+            isDisabled={isLoading}
+          />
+          <Button
+            title="Voltar"
+            styleType="secondary"
+            onPress={() => router.push("/")}
+          />
+        </View>
       </ScrollView>
     </View>
   );

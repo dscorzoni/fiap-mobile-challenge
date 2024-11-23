@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, ScrollView, Alert } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import Header from "@/components/Header";
 import { Colors } from "@/constants/Colors";
 import Button from "@/components/Button";
@@ -10,45 +10,48 @@ import AdminItem from "@/components/AdminItem";
 import { formatDate } from "@/api/utils/dates";
 
 export default function RedeEditUser() {
-  const { email } = useLocalSearchParams<{
-    email: string;
-  }>();
   const [posts, setPosts] = useState<Post[]>();
+
+  const { email } = useLocalSearchParams<{ email: string }>();
 
   const fetchPosts = async () => {
     const posts = await getPostsByUser(email);
+
     if (posts) {
       setPosts(posts);
     }
   };
 
-  function handleDelete(postId: string | undefined) {
-    if (postId) {
-      Alert.alert(
-        "Apagar post?",
-        "Você tem certeza que deseja apagar este post?",
-        [
-          { text: "Apagar", onPress: () => deletePost(postId) },
-          { text: "Cancelar", onPress: () => null },
-        ]
-      );
-    }
+  function handleDelete(postId: string) {
+    Alert.alert(
+      "Apagar post?",
+      "Você tem certeza que deseja apagar este post?",
+      [
+        { text: "Apagar", onPress: () => deletePost(postId) },
+        { text: "Cancelar", onPress: () => null },
+      ]
+    );
   }
 
-  useEffect(() => {
-    if (email) {
-      fetchPosts();
-    }
-  }, [email]);
+  useFocusEffect(() => {
+    fetchPosts();
+  });
 
   return (
     <View style={styles.container}>
       <Header name={`Meus Posts`} />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {!posts ? (
-          <Text>Não há postagens a serem mostradas.</Text>
-        ) : (
-          posts.map((post) => (
+      {!posts ? (
+        <View style={styles.notFoundContainer}>
+          <Text style={{ alignItems: "center", justifyContent: "center" }}>
+            Nenhum post encontrado
+          </Text>
+        </View>
+      ) : (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContainer}
+        >
+          {posts.map((post) => (
             <AdminItem
               key={post.id}
               postId={post.id}
@@ -61,11 +64,12 @@ export default function RedeEditUser() {
               editAction={() =>
                 router.push(`/(tabs)/home/edit-post?postId=${post.id}`)
               }
-              deleteAction={() => handleDelete(post.id)}
+              deleteAction={() => handleDelete(post.id as string)}
             />
-          ))
-        )}
-      </ScrollView>
+          ))}
+        </ScrollView>
+      )}
+      <View style={{ height: 20 }} />
 
       <Button
         styleType="secondary"
@@ -83,6 +87,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
+  },
+  notFoundContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  scrollContainer: {
+    marginBottom: 20,
+    paddingBottom: 20,
   },
   text: {
     color: Colors.primary,

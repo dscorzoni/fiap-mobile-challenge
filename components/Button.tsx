@@ -14,6 +14,8 @@ interface Props {
   onPress?(): void;
   icon?: keyof typeof Ionicons.glyphMap;
   isDisabled?: boolean;
+  height?: number;
+  width?: number;
 }
 
 export default function Button({
@@ -22,11 +24,20 @@ export default function Button({
   onPress,
   icon,
   isDisabled = false,
+  height,
+  width,
 }: Props) {
+  const customHeight = height ? { height } : {};
+  const customWidth = width ? { width } : {};
+
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={getStyle("button", styleType, isDisabled)}
+      style={[
+        getStyle("button", styleType, isDisabled),
+        customHeight,
+        customWidth,
+      ]}
       disabled={isDisabled}
     >
       {icon ? (
@@ -75,12 +86,10 @@ const styles = StyleSheet.create<Styles>({
   buttonPrimary: {
     ...baseButton,
     backgroundColor: Colors.primary,
-    marginVertical: 5,
   },
   buttonPrimaryDisabled: {
     ...baseButton,
     backgroundColor: Colors.darkGrey,
-    marginVertical: 5,
   },
   buttonSecondary: {
     ...baseButton,

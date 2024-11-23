@@ -14,17 +14,19 @@ export default function Index() {
       <View>
         <Ionicons name="document-text-outline" size={150} style={styles.icon} />
       </View>
-      <Button
-        title="Entrar"
-        icon="log-in"
-        onPress={() => router.push("/login")}
-      />
-      <Button
-        title="Registre-se"
-        icon="person-add"
-        styleType="secondary"
-        onPress={() => router.push("/register")}
-      />
+      <View style={{ gap: 10, width: "100%" }}>
+        <Button
+          title="Entrar"
+          icon="log-in"
+          onPress={() => router.push("/login")}
+        />
+        <Button
+          title="Registre-se"
+          icon="person-add"
+          styleType="secondary"
+          onPress={() => router.push("/register")}
+        />
+      </View>
     </View>
   );
 }

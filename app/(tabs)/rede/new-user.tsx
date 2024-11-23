@@ -15,12 +15,14 @@ export default function RedeNewUser() {
     <View style={styles.container}>
       <Header name={`Novo(a) ${roleLabel}`} />
       <UserForm role={role} />
-      <Button
-        styleType="secondary"
-        icon="arrow-back-circle"
-        title="Voltar"
-        onPress={() => router.back()}
-      />
+      <View style={{ marginTop: 10, width: "100%" }}>
+        <Button
+          styleType="secondary"
+          icon="arrow-back-circle"
+          title="Voltar"
+          onPress={() => router.back()}
+        />
+      </View>
     </View>
   );
 }

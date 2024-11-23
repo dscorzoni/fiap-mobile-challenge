@@ -14,7 +14,7 @@ import AddButton from "@/components/AddButton";
 export default function Index() {
   const [posts, setPosts] = useState<PostData[]>();
   const { user } = useAuthContext();
-  const { isTitleVisible, handleScroll } = useHandleScroll();
+  const { handleScroll } = useHandleScroll();
   const [filteredPosts, setFilteredPosts] = useState<PostData[]>([]);
   const [searchText, setSearchText] = useState("");
 
@@ -45,23 +45,34 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-      {isTitleVisible && <Header name="Posts" />}
-      <ScrollView
-        contentContainerStyle={styles.contentContainer}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        style={{ flex: 1 }}
-      >
+      <View style={styles.header}>
+        <Header name="Posts" />
         <SearchField
           searchText={searchText}
           setSearchText={setSearchText}
           placeholder="Busque pelo título do post"
-        ></SearchField>
-        {filteredPosts &&
-          filteredPosts.map((post) => (
+        />
+      </View>
+
+      {!filteredPosts.length ? (
+        <View style={styles.notFoundContainer}>
+          <Text style={{ alignItems: "center", justifyContent: "center" }}>
+            Nenhum post encontrado
+          </Text>
+        </View>
+      ) : (
+        <ScrollView
+          contentContainerStyle={styles.scrollContainer}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          showsVerticalScrollIndicator={false}
+        >
+          {filteredPosts.map((post) => (
             <View key={post.id} style={styles.postContainer}>
-              <Text style={styles.text}>{post.title}</Text>
-              <Text style={styles.paragraph}>
+              <Text style={styles.title} numberOfLines={3} ellipsizeMode="tail">
+                {post.title}
+              </Text>
+              <Text style={styles.author}>
                 {formatDate(String(post.date))} - Por Professor(a){" "}
                 {post.user.username}
               </Text>
@@ -108,7 +119,9 @@ export default function Index() {
               </View>
             </View>
           ))}
-      </ScrollView>
+        </ScrollView>
+      )}
+
       {(user?.role === "admin" || user?.role === "teacher") && (
         <AddButton onPress={() => router.navigate("/home/create-post")} />
       )}
@@ -122,23 +135,36 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     padding: 20,
   },
-  contentContainer: {},
-  postContainer: {
-    marginBottom: 20,
+  header: {
+    paddingBottom: 20,
+    borderBottomWidth: 1,
+    borderColor: Colors.primary,
   },
-  text: {
+  scrollContainer: {},
+  notFoundContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  postContainer: {
+    marginBottom: 40,
+  },
+  title: {
     paddingTop: 20,
     color: Colors.primary,
     fontWeight: "bold",
     fontSize: 17,
+    marginBottom: 5,
   },
   content: {
     color: Colors.defaultText,
     fontSize: 16,
   },
-  paragraph: {
+  author: {
     color: Colors.defaultText,
-    fontSize: 14,
+    fontSize: 12,
+    marginBottom: 10,
+    fontWeight: "bold",
   },
   image: {
     borderWidth: 1,
@@ -156,6 +182,7 @@ const styles = StyleSheet.create({
   actionBar: {
     paddingTop: 10,
     alignItems: "center",
+    gap: 10,
   },
   newPost: {
     alignItems: "center",

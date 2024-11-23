@@ -9,7 +9,7 @@ import {
 import Header from "@/components/Header";
 import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
-import AdminButton from "@/components/AdminButton";
+import SquareButton from "@/components/SquareButton";
 import AdminItem from "@/components/AdminItem";
 import { useEffect, useState } from "react";
 import { PostData } from "@/types/posts";
@@ -55,22 +55,23 @@ export default function Admin() {
         <Header name="Admin" />
         <Text style={styles.text}>Gerenciamento de Usuários</Text>
         <View style={styles.userAdmin}>
-          <AdminButton
+          <SquareButton
             title={"Gerenciar Professores"}
             icon={"briefcase"}
-            onPress={() => router.push(`/(tabs)/rede/teacher-list`)}
+            onPress={() => router.push(`/(tabs)/rede?role=teacher`)}
           />
-          <AdminButton
+          <SquareButton
             title={"Gerenciar Estudantes"}
             icon={"people"}
-            onPress={() => router.push(`/(tabs)/rede/student-list`)}
+            onPress={() => router.push(`/(tabs)/rede?role=student`)}
           />
         </View>
-
-        <Text style={styles.text}>Gerenciamento de Posts</Text>
       </View>
 
       <View style={styles.postsContainer}>
+        <Text style={[styles.text, { marginBottom: 10 }]}>
+          Gerenciamento de Posts
+        </Text>
         <ScrollView showsVerticalScrollIndicator={false}>
           {posts === undefined ? (
             <Text>Não há postagens a serem mostradas.</Text>
@@ -117,10 +118,12 @@ const styles = StyleSheet.create({
   text: {
     color: Colors.primary,
     fontSize: 20,
+    fontWeight: "bold",
   },
   postsContainer: {
     marginVertical: 10,
     height: postsHeight,
+    alignItems: "center",
   },
   userAdmin: {
     display: "flex",

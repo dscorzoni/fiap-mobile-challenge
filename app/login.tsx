@@ -33,17 +33,19 @@ export default function Login() {
       />
       <Text style={styles.forgotPassword}>Esqueci minha senha</Text>
       <View style={{ padding: 16 }} />
-      <Button
-        title={isLoading ? "Entrando..." : "Entrar"}
-        onPress={() => handleLogin(email, password)}
-        isDisabled={isLoading}
-      />
-      <Button
-        title="Voltar"
-        styleType="secondary"
-        onPress={() => router.push("/")}
-        isDisabled={isLoading}
-      />
+      <View style={{ gap: 10, width: "100%" }}>
+        <Button
+          title={isLoading ? "Entrando..." : "Entrar"}
+          onPress={() => handleLogin(email, password)}
+          isDisabled={isLoading}
+        />
+        <Button
+          title="Voltar"
+          styleType="secondary"
+          onPress={() => router.push("/")}
+          isDisabled={isLoading}
+        />
+      </View>
     </View>
   );
 }
