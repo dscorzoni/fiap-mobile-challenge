@@ -20,6 +20,17 @@ export async function getPostsById(id: string) {
     return false
   }
 }
+
+export async function getPostsByUser(email: string) {
+  try {
+    const response = await axios.get(`/posts/user?email=${email}`)
+    return response.data
+  } catch (error) {
+    console.error('Erro ao carregar posts', error)
+    return false
+  }
+}
+
 export async function updatePost(data: any) {
   try {
     const response = await axios.put(`/posts/${data.id}`, data)

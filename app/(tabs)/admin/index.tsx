@@ -83,10 +83,10 @@ export default function Admin() {
                 postTitle={post.title}
                 postDate={formatDate(String(post.date))}
                 showItem={() =>
-                  router.navigate(`/posts/detail?postId=${post.id}`)
+                  router.navigate(`/home/post-detail?postId=${post.id}`)
                 }
                 editAction={() =>
-                  router.push(`/(tabs)/posts/edit?postId=${post.id}`)
+                  router.push(`/(tabs)/home/edit-post?postId=${post.id}`)
                 }
                 deleteAction={() => handleDelete(post.id)}
               />

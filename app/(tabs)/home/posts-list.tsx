@@ -2,7 +2,6 @@ import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
 import Header from "@/components/Header";
 import { Colors } from "@/constants/Colors";
 import { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { getPosts } from "@/api/posts";
 import Button from "@/components/Button";
@@ -46,7 +45,7 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-      {isTitleVisible && <Header name="Lista de Posts" />}
+      {isTitleVisible && <Header name="Posts" />}
       <ScrollView
         contentContainerStyle={styles.contentContainer}
         onScroll={handleScroll}
@@ -92,16 +91,17 @@ export default function Index() {
                   title="Continuar a leitura"
                   icon="reader"
                   onPress={() =>
-                    router.navigate(`/posts/detail?postId=${post.id}`)
+                    router.navigate(`/home/post-detail?postId=${post.id}`)
                   }
                 ></Button>
-                {(user?.role === "admin" || user?.role === "teacher") && (
+                {(user?.email === post.user.email ||
+                  user?.role === "admin") && (
                   <Button
                     styleType="secondary"
                     title="Editar postagem"
                     icon="create"
                     onPress={() =>
-                      router.navigate(`/posts/edit?postId=${post.id}`)
+                      router.navigate(`/home/edit-post?postId=${post.id}`)
                     }
                   ></Button>
                 )}
@@ -110,7 +110,7 @@ export default function Index() {
           ))}
       </ScrollView>
       {(user?.role === "admin" || user?.role === "teacher") && (
-        <AddButton onPress={() => router.navigate("/posts/create")} />
+        <AddButton onPress={() => router.navigate("/home/create-post")} />
       )}
     </View>
   );

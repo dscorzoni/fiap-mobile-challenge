@@ -82,7 +82,7 @@ export default function PostEdit() {
       const response = await updatePost(post);
       if (response) {
         Alert.alert("Post atualizado com sucesso!");
-        router.replace(`/posts/list`);
+        router.replace(`/home/posts-list`);
       }
     } catch (error) {
       console.error("Erro ao atualizar post", error);
@@ -102,7 +102,7 @@ export default function PostEdit() {
                 const response = await deletePost(post?.id as string);
                 if (response) {
                   Alert.alert("Post deletado com sucesso!");
-                  router.replace(`/posts/list`);
+                  router.replace(`/home/posts-list`);
                 }
               } catch (error) {
                 console.error("Erro ao deletar post", error);
@@ -172,7 +172,7 @@ export default function PostEdit() {
           icon="arrow-back-circle"
           title="Voltar"
           styleType="secondary"
-          onPress={() => router.push("/posts/list")}
+          onPress={() => router.push("/home/posts-list")}
         />
         <Button
           icon="trash"
