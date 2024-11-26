@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import Header from "@/components/Header";
 import { Colors } from "@/constants/Colors";
@@ -10,13 +10,16 @@ import { useAuthContext } from "@/contexts/auth";
 import { getUserById } from "@/api/user/userService";
 
 export default function RedeEditUser() {
-  const { email } = useLocalSearchParams<{
+  const { email, role } = useLocalSearchParams<{
     email: string;
+    role: Role;
   }>();
-  const { role } = useLocalSearchParams<{ role: Role }>();
+
   const [user, setUser] = useState<User>();
   const auth = useAuthContext();
-  const roleLabel = role === "teacher" ? "Professor" : "Aluno";
+
+  const roleLabel = role === "teacher" ? "Professor" : "Estudante";
+
   const fetchUsers = async () => {
     const user = await getUserById(email);
     if (user) {
@@ -34,11 +37,13 @@ export default function RedeEditUser() {
     <View style={styles.container}>
       <Header name={`Editar ${roleLabel}`} />
       <UserForm role={role} initialValues={user} />
-      <Button
-        styleType="secondary"
-        title="Voltar"
-        onPress={() => router.back()}
-      />
+      <View style={{ marginTop: 10, width: "100%" }}>
+        <Button
+          styleType="secondary"
+          title="Voltar"
+          onPress={() => router.back()}
+        />
+      </View>
     </View>
   );
 }

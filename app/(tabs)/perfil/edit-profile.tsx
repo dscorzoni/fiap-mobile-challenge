@@ -29,11 +29,13 @@ export default function RedeEditUser() {
     <View style={styles.container}>
       <Header name={`Alterar meus dados`} />
       <UserForm role={user?.role as Role} initialValues={user} />
-      <Button
-        styleType="secondary"
-        title="Voltar"
-        onPress={() => router.back()}
-      />
+      <View style={{ marginTop: 10, width: "100%" }}>
+        <Button
+          styleType="secondary"
+          title="Voltar"
+          onPress={() => router.back()}
+        />
+      </View>
     </View>
   );
 }

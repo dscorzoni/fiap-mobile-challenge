@@ -149,7 +149,9 @@ export default function PostEdit() {
           style={styles.uploadButton}
         >
           <Ionicons name="cloud-upload" style={styles.icon} />
-          <Text style={styles.uploadButtonText}>Anexar imagem</Text>
+          <Text style={styles.uploadButtonText}>
+            {imagePreview ? "Alterar" : "Anexar"} imagem
+          </Text>
         </TouchableOpacity>
         {imagePreview && (
           <View>

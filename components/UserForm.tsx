@@ -19,7 +19,7 @@ export default function UserForm({ initialValues }: Props) {
   const isEdit = initialValues ? true : false;
   const infoUser = {
     label: role === "teacher" ? "Professor(a)" : "Estudante",
-    route: "/rede/" + (role === "teacher" ? "teacher-list" : "student-list"),
+    route: `/rede?role=${role}`,
   };
 
   const handleInputChange = (name: string, value: string) => {
