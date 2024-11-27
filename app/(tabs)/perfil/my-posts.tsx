@@ -1,24 +1,54 @@
-import { StyleSheet, View, Text, ScrollView, Alert } from "react-native";
-import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
+import { StyleSheet, View, ScrollView, Alert } from "react-native";
+import { router, useLocalSearchParams } from "expo-router";
 import Header from "@/components/Header";
 import { Colors } from "@/constants/Colors";
 import Button from "@/components/Button";
-import { Post, User } from "@/types";
+import { Post } from "@/types";
 import { useEffect, useState } from "react";
 import { deletePost, getPostsByUser } from "@/api/posts";
 import AdminItem from "@/components/AdminItem";
 import { formatDate } from "@/api/utils/dates";
+import FeedbackMessage from "@/components/FeedbackMessage";
+import { useAuthContext } from "@/contexts/auth";
 
 export default function RedeEditUser() {
   const [posts, setPosts] = useState<Post[]>();
+  const [isLoading, setLoading] = useState<boolean>(false);
 
-  const { email } = useLocalSearchParams<{ email: string }>();
+  const { user } = useAuthContext();
+
+  const { email, refresh } = useLocalSearchParams<{
+    email: string;
+    refresh: string;
+  }>();
+
+  useEffect(() => {
+    if (refresh && !isLoading) {
+      fetchPosts();
+    }
+  }, [refresh]);
 
   const fetchPosts = async () => {
-    const posts = await getPostsByUser(email);
+    setLoading(true);
+    const response = await getPostsByUser(email || (user?.email as string));
+    if (response.success) {
+      setPosts(response.value);
+    } else {
+      Alert.alert(
+        "Não foi possível carregar os posts. Tente novamente mais tarde."
+      );
+    }
+    setLoading(false);
+  };
 
-    if (posts) {
-      setPosts(posts);
+  const handleDeleteConfirmation = async (postId: string) => {
+    const response = await deletePost(postId);
+
+    if (response.success) {
+      Alert.alert("Post apagado com sucesso!");
+      fetchPosts();
+    } else {
+      Alert.alert("Não foi possível apagar o post. Tente novamente.");
     }
   };
 
@@ -27,25 +57,23 @@ export default function RedeEditUser() {
       "Apagar post?",
       "Você tem certeza que deseja apagar este post?",
       [
-        { text: "Apagar", onPress: () => deletePost(postId) },
+        { text: "Apagar", onPress: () => handleDeleteConfirmation(postId) },
         { text: "Cancelar", onPress: () => null },
       ]
     );
   }
 
-  useFocusEffect(() => {
+  useEffect(() => {
     fetchPosts();
-  });
+  }, []);
 
   return (
     <View style={styles.container}>
       <Header name={`Meus Posts`} />
-      {!posts ? (
-        <View style={styles.notFoundContainer}>
-          <Text style={{ alignItems: "center", justifyContent: "center" }}>
-            Nenhum post encontrado
-          </Text>
-        </View>
+      {!posts?.length || isLoading ? (
+        <FeedbackMessage
+          message={isLoading ? "Carregando posts..." : "Nenhum post encontrado"}
+        />
       ) : (
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -59,10 +87,14 @@ export default function RedeEditUser() {
               postTitle={post.title}
               postDate={formatDate(String(post.date))}
               showItem={() =>
-                router.navigate(`/home/post-detail?postId=${post.id}`)
+                router.push(
+                  `/home/post-detail?postId=${post.id}&refresh=${post.id}&tab=perfil/my-posts`
+                )
               }
               editAction={() =>
-                router.push(`/(tabs)/home/edit-post?postId=${post.id}`)
+                router.push(
+                  `/(tabs)/home/edit-post?postId=${post.id}&tab=perfil/my-posts`
+                )
               }
               deleteAction={() => handleDelete(post.id as string)}
             />
@@ -87,11 +119,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
-  },
-  notFoundContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
   scrollContainer: {
     marginBottom: 20,

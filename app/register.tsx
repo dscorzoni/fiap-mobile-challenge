@@ -67,7 +67,7 @@ export default function Register() {
         <Text style={styles.radioTitle}>Selecione um perfil:</Text>
         <RadioGroup
           options={[
-            { label: "Aluno", value: "student" },
+            { label: "Estudante", value: "student" },
             { label: "Professor", value: "teacher" },
             { label: "Admin", value: "admin" },
           ]}

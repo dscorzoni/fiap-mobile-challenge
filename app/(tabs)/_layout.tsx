@@ -1,19 +1,9 @@
 import { router, Tabs } from "expo-router";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { Colors } from "@/constants/Colors";
 import { useAuthContext } from "@/contexts/auth";
+import CustomTabBarButton from "@/components/TabBarButton";
 
 export default function TabLayout() {
-  const { isAuthenticated, isLoading, user } = useAuthContext();
-
-  if (!isLoading && !isAuthenticated) {
-    router.replace("/");
-    return null;
-  }
-
-  const adminProps = user?.role === "admin" ? {} : { href: null };
-  const studentProps = user?.role === "student" ? { href: null } : {};
-
   return (
     <Tabs
       screenOptions={{
@@ -30,12 +20,12 @@ export default function TabLayout() {
       <Tabs.Screen
         name="home"
         options={{
-          title: "Home",
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? "home-sharp" : "home-outline"}
-              color={color}
-              size={24}
+          tabBarButton: (props) => (
+            <CustomTabBarButton
+              {...props}
+              route={"/home/posts-list"}
+              label="Home"
+              icon="home"
             />
           ),
         }}
@@ -43,40 +33,40 @@ export default function TabLayout() {
       <Tabs.Screen
         name="rede"
         options={{
-          title: "Rede",
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? "people" : "people-outline"}
-              color={color}
-              size={24}
+          tabBarButton: (props) => (
+            <CustomTabBarButton
+              {...props}
+              route={"/rede"}
+              label="Rede"
+              icon="people"
+              restricted={["teacher", "admin"]}
             />
           ),
-          ...studentProps,
         }}
       />
       <Tabs.Screen
         name="admin"
         options={{
-          title: "Admin",
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? "settings" : "settings-outline"}
-              color={color}
-              size={24}
+          tabBarButton: (props) => (
+            <CustomTabBarButton
+              {...props}
+              route={"/admin"}
+              label="Admin"
+              icon="settings"
+              restricted={["admin"]}
             />
           ),
-          ...adminProps,
         }}
       />
       <Tabs.Screen
         name="perfil"
         options={{
-          title: "Perfil",
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? "person" : "person-outline"}
-              color={color}
-              size={24}
+          tabBarButton: (props) => (
+            <CustomTabBarButton
+              {...props}
+              route={"/perfil"}
+              label="Perfil"
+              icon="person"
             />
           ),
         }}

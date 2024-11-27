@@ -11,10 +11,11 @@ import { Colors } from "@/constants/Colors";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Role, User } from "@/types";
-import { deleteUser, getUserList } from "@/api/user/userService";
+import { deleteUser, getUserList } from "@/api/user";
 import ManageUserItem from "@/components/ManageUserItem";
 import Button from "@/components/Button";
 import AddButton from "@/components/AddButton";
+import FeedbackMessage from "@/components/FeedbackMessage";
 
 const { width } = Dimensions.get("window");
 const paddings = 20 * 2;
@@ -25,13 +26,19 @@ export default function Rede() {
   const [students, setStudents] = useState<User[]>();
   const [teachers, setTeachers] = useState<User[]>();
   const [isTeacher, setTeacher] = useState<boolean>(true);
+  const [isLoading, setLoading] = useState(false);
 
-  const { role } = useLocalSearchParams<{ role: Role }>();
+  const { role, refresh } = useLocalSearchParams<{
+    role: Role;
+    refresh: Role;
+  }>();
 
   const fetchUsers = async (role: Role) => {
+    setLoading(true);
     const users = await getUserList(role);
     const setUsers = role === "teacher" ? setTeachers : setStudents;
     setUsers(users);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -47,18 +54,52 @@ export default function Rede() {
     }
   }, [role]);
 
+  useEffect(() => {
+    if (refresh && !isLoading) {
+      fetchUsers(refresh);
+    }
+  }, [refresh]);
+
+  const handleDeleteConfirmation = async (email: string) => {
+    const response = await deleteUser(email);
+
+    if (response.success) {
+      Alert.alert(
+        `${isTeacher ? "Professor" : "Estudante"} apagado com sucesso!`
+      );
+      fetchUsers(isTeacher ? "teacher" : "student");
+    } else {
+      Alert.alert(
+        `Não foi possível apagar o(a) ${
+          isTeacher ? "Professor(a)" : "Estudante"
+        }`
+      );
+    }
+  };
+
   function handleDelete(email: string) {
     if (email) {
       Alert.alert(
-        "Apagar professor(a)?",
-        "Você tem certeza que deseja apagar este(a) professor(a)?",
+        `Apagar ${isTeacher ? "Professor(a)" : "Estudante"}?`,
+        `Você tem certeza que deseja apagar este(a) ${
+          isTeacher ? "Professor(a)" : "Estudante"
+        }(a)?`,
         [
-          { text: "Apagar", onPress: () => deleteUser(email) },
+          { text: "Apagar", onPress: () => handleDeleteConfirmation(email) },
           { text: "Cancelar", onPress: () => null },
         ]
       );
     }
   }
+
+  const handleChange = (isTeacherSelected: boolean) => {
+    setLoading(true);
+    setTeacher(isTeacherSelected);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 100);
+  };
 
   return (
     <View style={styles.container}>
@@ -68,7 +109,7 @@ export default function Rede() {
           <Button
             title={"Professores"}
             icon={"briefcase"}
-            onPress={() => setTeacher(true)}
+            onPress={() => handleChange(true)}
             width={buttonWidth}
             height={60}
             styleType={isTeacher ? "primary" : "secondary"}
@@ -76,7 +117,7 @@ export default function Rede() {
           <Button
             title={"Estudantes"}
             icon={"people"}
-            onPress={() => setTeacher(false)}
+            onPress={() => handleChange(false)}
             width={buttonWidth}
             height={60}
             styleType={!isTeacher ? "primary" : "secondary"}
@@ -88,33 +129,36 @@ export default function Rede() {
         <Text style={[styles.title, { marginBottom: 10 }]}>
           Listagem de {isTeacher ? "Professores" : "Estudantes"}
         </Text>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <>
-            {(isTeacher ? teachers : students)?.map((user) => {
-              return (
-                <ManageUserItem
-                  key={user.id}
-                  id={user.id}
-                  username={user.username}
-                  email={user.email}
-                  editAction={() =>
-                    router.push(
-                      `/rede/edit-user?email=${user.email}&role=${
-                        isTeacher ? "teacher" : "student"
-                      }`
-                    )
-                  }
-                  deleteAction={() => handleDelete(user.email)}
-                />
-              );
-            })}
-            <View style={{ height: 80 }} />
-          </>
-        </ScrollView>
+        {isLoading ? (
+          <FeedbackMessage message="Carregando Listagem..." />
+        ) : (
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <>
+              {(isTeacher ? teachers : students)?.map((user) => {
+                return (
+                  <ManageUserItem
+                    key={user.id}
+                    username={user.username}
+                    email={user.email}
+                    editAction={() =>
+                      router.push(
+                        `/rede/edit-user?email=${user.email}&role=${
+                          isTeacher ? "teacher" : "student"
+                        }`
+                      )
+                    }
+                    deleteAction={() => handleDelete(user.email)}
+                  />
+                );
+              })}
+              <View style={{ height: 80 }} />
+            </>
+          </ScrollView>
+        )}
       </View>
       <AddButton
         onPress={() =>
-          router.navigate(
+          router.push(
             `/rede/new-user?role=${isTeacher ? "teacher" : "student"}`
           )
         }

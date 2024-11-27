@@ -4,11 +4,14 @@ export const ERROR_MESSAGE = {
   UNAUTHORIZED: 'Faça o login para continuar',
   INTERNAL_SERVER_ERROR: 'Erro interno do servidor',
   CONFLICT: 'Usuário/email já existentes',
+  BAD_REQUEST: 'Requisição inválida. Verifique os dados fornecidos'
 } 
 
 export const getErrorMessage = (status?: number) => {
   if(status) {
     switch (status) {
+      case 400:
+        return ERROR_MESSAGE.BAD_REQUEST;
       case 401:
         return ERROR_MESSAGE.UNAUTHORIZED;
       case 403:

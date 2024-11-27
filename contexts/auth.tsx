@@ -12,7 +12,7 @@ import { getUserFromJWT } from "@/api/utils/token";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { Alert } from "react-native";
-import { createUser } from "@/api/user/userService";
+import { createUser } from "@/api/user";
 import { ERROR_MESSAGE } from "@/api/utils/errors";
 
 export interface AuthContextProps {
@@ -29,6 +29,7 @@ export interface AuthContextProps {
     confirmPassword: string,
     role: Role
   ) => Promise<void>;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -85,8 +86,8 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
     if (response.success) {
       setUser(null);
       setError(null);
-      router.replace("/login");
       Alert.alert("Usuário deslogado");
+      router.push("/");
     } else {
       setError(response.error);
       Alert.alert(response.error, "Tente novamente.");
@@ -121,7 +122,7 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
     });
 
     if (response.success) {
-      router.replace("/login");
+      router.push("/login");
       Alert.alert("Usuário cadastrado", "Faça o login para continuar");
       setError(null);
     } else {
@@ -142,6 +143,7 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
         handleLogin,
         handleLogout,
         handleRegister,
+        setUser,
       }}
     >
       {children}

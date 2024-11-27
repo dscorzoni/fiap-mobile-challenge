@@ -10,7 +10,7 @@ export default function RootLayout() {
     const checkLoginStatus = async () => {
       const token = await AsyncStorage.getItem("jwtToken");
       if (!token) {
-        router.replace("/"); // Redireciona para a tela de login se o token não estiver presente
+        router.replace("/");
       } else {
         router.replace("/home/posts-list");
       }

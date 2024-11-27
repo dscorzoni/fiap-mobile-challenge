@@ -7,7 +7,7 @@ import { Role, User } from "@/types";
 import UserForm from "@/components/UserForm";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@/contexts/auth";
-import { getUserById } from "@/api/user/userService";
+import { getUserById } from "@/api/user";
 
 export default function RedeEditUser() {
   const { email, role } = useLocalSearchParams<{

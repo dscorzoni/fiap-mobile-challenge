@@ -8,7 +8,7 @@ import {
   Alert,
   ScrollView,
 } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
+import { Href, router, useLocalSearchParams } from "expo-router";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
 import { useEffect, useState } from "react";
@@ -19,12 +19,21 @@ import * as ImagePicker from "expo-image-picker";
 import { Colors } from "@/constants/Colors";
 import { useHandleScroll } from "@/api/utils/handleScroll";
 import { Ionicons } from "@expo/vector-icons";
+import FeedbackMessage from "@/components/FeedbackMessage";
 
 export default function PostEdit() {
-  const { postId } = useLocalSearchParams<{ postId: string }>();
   const [post, setPost] = useState<PostData>();
   const [initialPost, setInitialPost] = useState<PostData>();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isLoading, setLoading] = useState<boolean>(false);
+
+  const { postId, tab } = useLocalSearchParams<{
+    postId: string;
+    tab: string;
+  }>();
+
+  const previousTab = tab as Href<string>;
+
   const { user } = useAuthContext();
 
   const { handleScroll } = useHandleScroll();
@@ -36,14 +45,17 @@ export default function PostEdit() {
   }, [user, postId]);
 
   const fetchPostById = async () => {
-    const post = await getPostsById(postId);
-    if (!post) {
-      router.replace("/login");
+    setLoading(true);
+    const response = await getPostsById(postId);
+
+    if (response.success) {
+      setPost(response.value);
+      setInitialPost(response.value);
+      setImagePreview(response.value.image);
     } else {
-      setPost(post);
-      setInitialPost(post);
-      setImagePreview(post.image);
+      Alert.alert("Não foi possível carregar o post. Tente novamente.");
     }
+    setLoading(false);
   };
 
   const handleInputChange = (name: string, value: string) => {
@@ -77,15 +89,29 @@ export default function PostEdit() {
     }
   };
 
+  const handleGoBack = (shouldRefresh = false) => {
+    const refreshParam = shouldRefresh ? `?refresh=${postId}` : "";
+    if (previousTab) {
+      router.push(`${previousTab}${refreshParam}` as Href);
+    } else {
+      router.push(`home/posts-list${refreshParam}` as Href);
+    }
+  };
+
   const handleSave = async () => {
-    try {
-      const response = await updatePost(post);
-      if (response) {
+    if (post) {
+      const response = await updatePost(postId, {
+        content: post.content,
+        title: post.title,
+        image: post.image ? post.image : "",
+      });
+
+      if (response.success) {
         Alert.alert("Post atualizado com sucesso!");
-        router.replace(`/home/posts-list`);
+        handleGoBack(true);
+      } else {
+        Alert.alert("Erro ao atualizar post.", response.error);
       }
-    } catch (error) {
-      console.error("Erro ao atualizar post", error);
     }
   };
 
@@ -102,7 +128,7 @@ export default function PostEdit() {
                 const response = await deletePost(post?.id as string);
                 if (response) {
                   Alert.alert("Post deletado com sucesso!");
-                  router.replace(`/home/posts-list`);
+                  handleGoBack(true);
                 }
               } catch (error) {
                 console.error("Erro ao deletar post", error);
@@ -130,58 +156,70 @@ export default function PostEdit() {
         scrollEventThrottle={16}
       >
         <Header name={`Editar Post`} />
-        <TextInput
-          style={styles.input}
-          placeholder="Título"
-          value={post?.title || ""}
-          onChangeText={(text) => handleInputChange("title", text)}
-        />
-        <TextInput
-          style={styles.textarea}
-          placeholder="Conteúdo"
-          value={post?.content || ""}
-          onChangeText={(text) => handleInputChange("content", text)}
-          multiline
-          numberOfLines={4}
-        />
-        <TouchableOpacity
-          onPress={handleImageUpload}
-          style={styles.uploadButton}
-        >
-          <Ionicons name="cloud-upload" style={styles.icon} />
-          <Text style={styles.uploadButtonText}>
-            {imagePreview ? "Alterar" : "Anexar"} imagem
-          </Text>
-        </TouchableOpacity>
-        {imagePreview && (
-          <View>
+        {isLoading ? (
+          <FeedbackMessage message="Carregando post..." />
+        ) : (
+          <>
+            <TextInput
+              style={styles.input}
+              placeholder="Título"
+              value={post?.title || ""}
+              onChangeText={(text) => handleInputChange("title", text)}
+            />
+            <TextInput
+              style={styles.textarea}
+              placeholder="Conteúdo"
+              value={post?.content || ""}
+              onChangeText={(text) => handleInputChange("content", text)}
+              multiline
+              numberOfLines={4}
+            />
             <TouchableOpacity
-              onPress={handleRemoveImage}
-              style={styles.removeImageButton}
+              onPress={handleImageUpload}
+              style={styles.uploadButton}
             >
-              <Ionicons name="close-circle-outline" style={{ fontSize: 28 }} />
+              <Ionicons name="cloud-upload" style={styles.icon} />
+              <Text style={styles.uploadButtonText}>
+                {imagePreview ? "Alterar" : "Anexar"} imagem
+              </Text>
             </TouchableOpacity>
-            <Image source={{ uri: imagePreview }} style={styles.imagePreview} />
-          </View>
+            {imagePreview && (
+              <View>
+                <TouchableOpacity
+                  onPress={handleRemoveImage}
+                  style={styles.removeImageButton}
+                >
+                  <Ionicons
+                    name="close-circle-outline"
+                    style={{ fontSize: 28 }}
+                  />
+                </TouchableOpacity>
+                <Image
+                  source={{ uri: imagePreview }}
+                  style={styles.imagePreview}
+                />
+              </View>
+            )}
+            <Button
+              icon="save"
+              isDisabled={!hasChanges}
+              title="Salvar"
+              onPress={handleSave}
+            />
+            <Button
+              icon="arrow-back-circle"
+              title="Voltar"
+              styleType="secondary"
+              onPress={handleGoBack}
+            />
+            <Button
+              icon="trash"
+              styleType="secondary"
+              title="Deletar"
+              onPress={handleDelete}
+            />
+          </>
         )}
-        <Button
-          icon="save"
-          isDisabled={!hasChanges}
-          title="Salvar"
-          onPress={handleSave}
-        />
-        <Button
-          icon="arrow-back-circle"
-          title="Voltar"
-          styleType="secondary"
-          onPress={() => router.push("/home/posts-list")}
-        />
-        <Button
-          icon="trash"
-          styleType="secondary"
-          title="Deletar"
-          onPress={handleDelete}
-        />
       </ScrollView>
     </View>
   );

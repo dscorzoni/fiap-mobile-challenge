@@ -1,62 +1,59 @@
-import { PostData } from '@/types'
+import { Post, PostData } from '@/types'
 import axios from '../lib/axios'
+import { getErrorMessage } from '../utils/errors';
+import { AxiosError } from 'axios';
 
 export async function getPosts() {
   try {
     const response = await axios.get('/posts/')
-    return response.data
+    return { success: true , value: response.data }
   } catch (error) {
-    console.error('Erro ao carregar posts', error)
-    return false
+    return { success: false, error: getErrorMessage((error as AxiosError).status)}
   }
 }
 
 export async function getPostsById(id: string) {
   try {
     const response = await axios.get(`/posts/${id}`)
-    return response.data
+    return { success: true , value: response.data }
   } catch (error) {
-    console.error('Erro ao carregar post', error)
-    return false
+    return { success: false, error: getErrorMessage((error as AxiosError).status)}
   }
 }
 
 export async function getPostsByUser(email: string) {
   try {
     const response = await axios.get(`/posts/user?email=${email}`)
-    return response.data
+    return { success: true , value: response.data }
   } catch (error) {
-    console.error('Erro ao carregar posts', error)
-    return false
+    return { success: false, error: getErrorMessage((error as AxiosError).status)}
+
   }
 }
 
-export async function updatePost(data: any) {
+export async function updatePost(id: string, post: Partial<PostData>) {
   try {
-    const response = await axios.put(`/posts/${data.id}`, data)
-    return response.data
+    const response = await axios.put(`/posts/${id}`, post)
+    return { success: true , value: response.data }
   } catch (error) {
-    console.error('Erro ao atualizar post', error)
-    return false
+    return { success: false, error: getErrorMessage((error as AxiosError).status)}
   }
 }
 
 export async function deletePost(postId: string) {
   try {
     const response = await axios.delete('/posts/' + postId)
-    return response.status
+    return { success: true , value: response.status }
   } catch (error) {
-    console.error('Erro ao deletar post.', error)
-    return false
+    return { success: false, error: getErrorMessage((error as AxiosError).status)}
   }
 }
 
 export async function createPost(data: PostData) {
   try {
     const response = await axios.post('/posts/', data)
-    return response.data
+    return { success: true , value: response.data }
   } catch (error) {
-    console.error('Erro ao criar post', error)
-    return false
+    return { success: false, error: getErrorMessage((error as AxiosError).status)}
   }
 }

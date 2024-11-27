@@ -13,7 +13,6 @@ interface Props {
 }
 
 export default function AdminItem({
-  postId,
   authorName,
   postTitle,
   postDate,
@@ -63,8 +62,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingRight: 10,
     width: "68%",
-    // flexWrap: "wrap",
-    // maxWidth: "40%",
   },
   postTitle: {
     fontWeight: "bold",

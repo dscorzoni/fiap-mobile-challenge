@@ -2,24 +2,31 @@ import { StyleSheet, TextInput, Alert, View } from "react-native";
 import { Role, User } from "@/types";
 import React, { useState } from "react";
 import Button from "./Button";
-import { createUser, updateUser } from "@/api/user/userService";
-import { Href, router, useLocalSearchParams } from "expo-router";
+import { createUser, updateUser } from "@/api/user";
+import { Href, router } from "expo-router";
 import { Colors } from "@/constants/Colors";
 
 interface Props {
   role: Role;
   initialValues?: User;
+  isMyProfile?: boolean;
+  onSuccess?: (userData: User) => void;
 }
 
-export default function UserForm({ initialValues }: Props) {
-  const { role } = useLocalSearchParams<{ role: Role }>();
+export default function UserForm({
+  initialValues,
+  isMyProfile,
+  role,
+  onSuccess,
+}: Props) {
   const [userData, setUserData] = useState<User>();
   const [confirmPassword, setConfirmPassword] = useState<string>();
+  const [isLoading, setLoading] = useState<boolean>();
 
   const isEdit = initialValues ? true : false;
   const infoUser = {
     label: role === "teacher" ? "Professor(a)" : "Estudante",
-    route: `/rede?role=${role}`,
+    route: isMyProfile ? "/perfil" : `/rede?role=${role}&refresh=${role}`,
   };
 
   const handleInputChange = (name: string, value: string) => {
@@ -49,7 +56,8 @@ export default function UserForm({ initialValues }: Props) {
 
   const handleSave = async () => {
     try {
-      if (!isEdit && userData) {
+      setLoading(true);
+      if (!isEdit && userData && !isLoading) {
         const response = await createUser({
           username: userData.username,
           email: userData.email,
@@ -58,27 +66,36 @@ export default function UserForm({ initialValues }: Props) {
         });
         if (response.success) {
           Alert.alert(`${infoUser.label} criado com sucesso!`);
-          router.replace(infoUser.route as Href);
+          router.push(infoUser.route as Href);
+          onSuccess && onSuccess(userData);
         } else {
           Alert.alert(
             `Ocorreu um problema ao tentar criar ${infoUser.label}`,
             response.error
           );
         }
-      } else if (initialValues && userData) {
+      } else if (initialValues && userData && !isLoading) {
         const response = await updateUser(initialValues.email, userData);
         if (response.success) {
-          Alert.alert(`${infoUser.label} editado com sucesso!`);
-          router.replace(infoUser.route as Href);
+          const successMessage = isMyProfile
+            ? "Perfil editado com sucesso!"
+            : `${infoUser.label} editado com sucesso!`;
+          Alert.alert(successMessage);
+          router.push(infoUser.route as Href);
+          onSuccess && onSuccess(userData);
         } else {
           Alert.alert(
-            `Ocorreu um problema ao tentar editar ${infoUser.label}`,
+            `Ocorreu um problema ao tentar editar o ${
+              isMyProfile ? "perfil" : infoUser.label
+            }`,
             response.error
           );
         }
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -101,46 +118,22 @@ export default function UserForm({ initialValues }: Props) {
         onChangeText={(text) => handleInputChange("email", text)}
         placeholderTextColor={Colors.primary}
       ></TextInput>
-      {!initialValues && (
-        <TextInput
-          autoCapitalize="none"
-          style={styles.input}
-          placeholder="Senha"
-          secureTextEntry={true}
-          onChangeText={(text) => handleInputChange("password", text)}
-          placeholderTextColor={Colors.primary}
-        ></TextInput>
-      )}
-      {!initialValues && (
-        <TextInput
-          autoCapitalize="none"
-          style={styles.input}
-          placeholder="Confirmar Senha"
-          secureTextEntry={true}
-          onChangeText={(text) => setConfirmPassword(text)}
-          placeholderTextColor={Colors.primary}
-        ></TextInput>
-      )}
-      {initialValues && (
-        <TextInput
-          autoCapitalize="none"
-          style={styles.input}
-          placeholder="Nova Senha"
-          secureTextEntry={true}
-          onChangeText={(text) => handleInputChange("password", text)}
-          placeholderTextColor={Colors.primary}
-        ></TextInput>
-      )}
-      {initialValues && (
-        <TextInput
-          autoCapitalize="none"
-          style={styles.input}
-          placeholder="Confirmar Senha"
-          secureTextEntry={true}
-          onChangeText={(text) => setConfirmPassword(text)}
-          placeholderTextColor={Colors.primary}
-        ></TextInput>
-      )}
+      <TextInput
+        autoCapitalize="none"
+        style={styles.input}
+        placeholder={initialValues ? "Nova Senha" : "Senha"}
+        secureTextEntry={true}
+        onChangeText={(text) => handleInputChange("password", text)}
+        placeholderTextColor={Colors.primary}
+      ></TextInput>
+      <TextInput
+        autoCapitalize="none"
+        style={styles.input}
+        placeholder="Confirmar Senha"
+        secureTextEntry={true}
+        onChangeText={(text) => setConfirmPassword(text)}
+        placeholderTextColor={Colors.primary}
+      ></TextInput>
       <View style={{ marginTop: 20 }} />
       <Button
         title="Salvar"

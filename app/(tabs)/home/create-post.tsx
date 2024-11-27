@@ -55,15 +55,16 @@ export default function CreatePost() {
   };
 
   const handleSave = async () => {
-    try {
-      post && user?.id ? (post.user_id = Number(user.id)) : null;
-      const response = await createPost(post as PostData);
-      if (response) {
-        Alert.alert("Post criado com sucesso!");
-        router.replace(`/home/posts-list`);
-      }
-    } catch (error) {
-      console.error("Erro ao criar post", error);
+    if (post && user?.id) post.user_id = Number(user.id);
+
+    const response = await createPost(post as PostData);
+    if (response.success) {
+      setPost(undefined);
+      setImagePreview(null);
+      Alert.alert("Post criado com sucesso!");
+      router.push("/home/posts-list?refresh=true");
+    } else {
+      console.error("Erro ao criar post", response.error);
     }
   };
 
@@ -106,18 +107,20 @@ export default function CreatePost() {
           <Image source={{ uri: imagePreview }} style={styles.imagePreview} />
         </View>
       )}
-      <Button
-        icon="save"
-        isDisabled={!post?.title || !post?.content}
-        title="Salvar"
-        onPress={handleSave}
-      />
-      <Button
-        icon="arrow-back-circle"
-        styleType="secondary"
-        title="Voltar"
-        onPress={() => router.back()}
-      />
+      <View style={{ gap: 10, width: "100%" }}>
+        <Button
+          icon="save"
+          isDisabled={!post?.title || !post?.content}
+          title="Salvar"
+          onPress={handleSave}
+        />
+        <Button
+          icon="arrow-back-circle"
+          styleType="secondary"
+          title="Voltar"
+          onPress={() => router.back()}
+        />
+      </View>
     </View>
   );
 }

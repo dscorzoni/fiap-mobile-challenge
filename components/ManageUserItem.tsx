@@ -3,7 +3,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 interface Props {
-  id: string;
   username: string;
   email: string;
   editAction?(): void;
@@ -11,7 +10,6 @@ interface Props {
 }
 
 export default function ManageUserItem({
-  id,
   username,
   email,
   editAction,

@@ -8,33 +8,55 @@ import {
 } from "react-native";
 import Header from "@/components/Header";
 import { Colors } from "@/constants/Colors";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import SquareButton from "@/components/SquareButton";
 import AdminItem from "@/components/AdminItem";
 import { useEffect, useState } from "react";
 import { PostData } from "@/types/posts";
-import { useAuthContext } from "@/contexts/auth";
 import { deletePost, getPosts } from "@/api/posts";
 import { formatDate } from "@/api/utils/dates";
+import FeedbackMessage from "@/components/FeedbackMessage";
 
 export default function Admin() {
   const [posts, setPosts] = useState<PostData[]>();
-  const user = useAuthContext();
+  const [isLoading, setLoading] = useState<boolean>(false);
+
+  const { refresh } = useLocalSearchParams<{ refresh?: string }>();
+
+  useEffect(() => {
+    if (refresh && !isLoading) {
+      fetchPosts();
+    }
+  }, [refresh]);
 
   const fetchPosts = async () => {
-    const posts = await getPosts();
-    if (!posts) {
-      router.replace("/login");
+    setLoading(true);
+    const response = await getPosts();
+
+    if (response.success) {
+      setPosts(response.value);
     } else {
-      setPosts(posts);
+      Alert.alert("Erro ao carregar os posts", response.error);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
-    if (user) {
+    if (!isLoading) {
       fetchPosts();
     }
-  }, [user, posts]);
+  }, []);
+
+  const handleDeleteConfirmation = async (postId: string) => {
+    const response = await deletePost(postId);
+
+    if (response.success) {
+      Alert.alert("Post apagado com sucesso!");
+    } else {
+      Alert.alert("Não foi possível apagar o post. Tente novamente.");
+    }
+    fetchPosts();
+  };
 
   function handleDelete(postId: string | undefined) {
     if (postId) {
@@ -42,7 +64,7 @@ export default function Admin() {
         "Apagar post?",
         "Você tem certeza que deseja apagar este post?",
         [
-          { text: "Apagar", onPress: () => deletePost(postId) },
+          { text: "Apagar", onPress: () => handleDeleteConfirmation(postId) },
           { text: "Cancelar", onPress: () => null },
         ]
       );
@@ -74,7 +96,13 @@ export default function Admin() {
         </Text>
         <ScrollView showsVerticalScrollIndicator={false}>
           {posts === undefined ? (
-            <Text>Não há postagens a serem mostradas.</Text>
+            <FeedbackMessage
+              message={
+                isLoading
+                  ? "Carregando posts..."
+                  : "Não há postagens a serem mostradas."
+              }
+            />
           ) : (
             posts.map((post) => (
               <AdminItem
@@ -84,10 +112,12 @@ export default function Admin() {
                 postTitle={post.title}
                 postDate={formatDate(String(post.date))}
                 showItem={() =>
-                  router.navigate(`/home/post-detail?postId=${post.id}`)
+                  router.push(`/home/post-detail?postId=${post.id}&tab=admin`)
                 }
                 editAction={() =>
-                  router.push(`/(tabs)/home/edit-post?postId=${post.id}`)
+                  router.push(
+                    `/(tabs)/home/edit-post?postId=${post.id}&tab=admin`
+                  )
                 }
                 deleteAction={() => handleDelete(post.id)}
               />

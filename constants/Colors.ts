@@ -11,4 +11,5 @@ export const Colors = {
   uploadButton: "#007bff",
   warning: "#BB2124",
   lightYellow: "#fff2cc",
+  tab: "#7b7b7b",
 }

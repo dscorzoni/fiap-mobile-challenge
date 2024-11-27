@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
+import { StyleSheet, Text, View, Image, ScrollView, Alert } from "react-native";
 import Header from "@/components/Header";
 import { Colors } from "@/constants/Colors";
 import { useEffect, useState } from "react";
-import { router } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { getPosts } from "@/api/posts";
 import Button from "@/components/Button";
 import { PostData } from "@/types/posts";
@@ -11,18 +11,30 @@ import { formatDate } from "@/api/utils/dates";
 import { useHandleScroll } from "@/api/utils/handleScroll";
 import SearchField from "@/components/SearchField/SearchField";
 import AddButton from "@/components/AddButton";
+import FeedbackMessage from "@/components/FeedbackMessage";
+
 export default function Index() {
   const [posts, setPosts] = useState<PostData[]>();
-  const { user } = useAuthContext();
-  const { handleScroll } = useHandleScroll();
   const [filteredPosts, setFilteredPosts] = useState<PostData[]>([]);
+  const [isLoading, setLoading] = useState<boolean>(false);
   const [searchText, setSearchText] = useState("");
 
+  const { user } = useAuthContext();
+  const { handleScroll } = useHandleScroll();
+
+  const { refresh } = useLocalSearchParams<{ refresh?: string }>();
+
   useEffect(() => {
-    if (user) {
+    if (!isLoading) {
       fetchPosts();
     }
-  }, [user, posts]);
+  }, []);
+
+  useEffect(() => {
+    if (refresh && !isLoading) {
+      fetchPosts();
+    }
+  }, [refresh]);
 
   useEffect(() => {
     if (posts) {
@@ -35,12 +47,14 @@ export default function Index() {
   }, [searchText, posts]);
 
   const fetchPosts = async () => {
-    const posts = await getPosts();
-    if (!posts) {
-      router.replace("/login");
+    setLoading(true);
+    const response = await getPosts();
+    if (response.success) {
+      setPosts(response.value);
     } else {
-      setPosts(posts);
+      Alert.alert("Não foi possível carregar os posts.", response.error);
     }
+    setLoading(false);
   };
 
   return (
@@ -54,12 +68,10 @@ export default function Index() {
         />
       </View>
 
-      {!filteredPosts.length ? (
-        <View style={styles.notFoundContainer}>
-          <Text style={{ alignItems: "center", justifyContent: "center" }}>
-            Nenhum post encontrado
-          </Text>
-        </View>
+      {!filteredPosts.length || isLoading ? (
+        <FeedbackMessage
+          message={isLoading ? "Carregando posts..." : "Nenhum post encontrado"}
+        />
       ) : (
         <ScrollView
           contentContainerStyle={styles.scrollContainer}
@@ -102,7 +114,7 @@ export default function Index() {
                   title="Continuar a leitura"
                   icon="reader"
                   onPress={() =>
-                    router.navigate(`/home/post-detail?postId=${post.id}`)
+                    router.push(`/home/post-detail?postId=${post.id}`)
                   }
                 ></Button>
                 {(user?.email === post.user.email ||
@@ -112,7 +124,7 @@ export default function Index() {
                     title="Editar postagem"
                     icon="create"
                     onPress={() =>
-                      router.navigate(`/home/edit-post?postId=${post.id}`)
+                      router.push(`/home/edit-post?postId=${post.id}`)
                     }
                   ></Button>
                 )}
@@ -141,11 +153,6 @@ const styles = StyleSheet.create({
     borderColor: Colors.primary,
   },
   scrollContainer: {},
-  notFoundContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   postContainer: {
     marginBottom: 40,
   },
