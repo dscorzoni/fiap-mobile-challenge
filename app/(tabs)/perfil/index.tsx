@@ -7,7 +7,7 @@ import { useAuthContext } from "@/contexts/auth";
 import SquareButton from "@/components/SquareButton";
 
 export default function Profile() {
-  const { handleLogout, isLoading, user } = useAuthContext();
+  const { handleLogout, user } = useAuthContext();
   const isStudent = user?.role === "student";
 
   return (

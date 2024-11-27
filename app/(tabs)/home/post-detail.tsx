@@ -1,5 +1,5 @@
-import { ScrollView, StyleSheet, Text, View, Image } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
+import { ScrollView, StyleSheet, Text, View, Image, Alert } from "react-native";
+import { Href, router, useLocalSearchParams } from "expo-router";
 import Header from "@/components/Header";
 import { Colors } from "@/constants/Colors";
 import Button from "@/components/Button";
@@ -9,26 +9,44 @@ import { getPostsById } from "@/api/posts";
 import { PostData } from "@/types";
 import { formatDate } from "@/api/utils/dates";
 import { useHandleScroll } from "@/api/utils/handleScroll";
+import FeedbackMessage from "@/components/FeedbackMessage";
 
 export default function PostDetail() {
+  const [post, setPost] = useState<PostData>();
+  const [isLoading, setLoading] = useState<boolean>(false);
+
   const { user } = useAuthContext();
-  const { postId } = useLocalSearchParams<{ postId: string }>();
-  const [post, setPosts] = useState<PostData>();
+  const { postId, tab, refresh } = useLocalSearchParams<{
+    postId: string;
+    tab: string;
+    refresh?: string;
+  }>();
   const { handleScroll } = useHandleScroll();
 
-  useEffect(() => {
-    if (user && postId) {
-      fetchPostById();
-    }
-  }, [user, postId]);
+  const previousTab = tab as Href<string>;
 
-  const fetchPostById = async () => {
-    const post = await getPostsById(postId);
-    if (!post) {
-      router.replace("/login");
-    } else {
-      setPosts(post);
+  useEffect(() => {
+    if (postId) {
+      fetchPostById(postId);
     }
+  }, [postId]);
+
+  useEffect(() => {
+    if (refresh && !isLoading) {
+      fetchPostById(refresh);
+    }
+  }, [refresh]);
+
+  const fetchPostById = async (id: string) => {
+    setLoading(true);
+    const response = await getPostsById(id);
+
+    if (response.success) {
+      setPost(response.value);
+    } else {
+      Alert.alert("Não foi possível carregar o post", "Tente novamente.");
+    }
+    setLoading(false);
   };
 
   return (
@@ -41,46 +59,53 @@ export default function PostDetail() {
       >
         <Header name="Post" />
 
-        {post && (
-          <View key={post.id} style={styles.postContainer}>
-            <Text style={styles.title}>{post.title}</Text>
-            <Text style={styles.author}>
-              {formatDate(String(post.date))} - Por Professor(a){" "}
-              {post.user.username}
-            </Text>
-            {post.image && (
-              <View style={styles.imageContainer}>
-                <Image
-                  style={styles.image}
-                  source={{ uri: post.image }}
-                  onError={(e) =>
-                    console.log(
-                      `Erro ao carregar imagem: ${e.nativeEvent.error}`
-                    )
-                  }
-                />
-              </View>
-            )}
-            <Text style={styles.content}>{post.content}</Text>
-            <View style={styles.actionBar}>
-              {(user?.email === post.user.email || user?.role === "admin") && (
-                <Button
-                  styleType="secondary"
-                  title="Editar postagem"
-                  icon="create"
-                  onPress={() =>
-                    router.navigate(`/home/edit-post?postId=${post.id}`)
-                  }
-                ></Button>
+        {isLoading ? (
+          <FeedbackMessage message="Carregando Post..." />
+        ) : (
+          post && (
+            <View key={post.id} style={styles.postContainer}>
+              <Text style={styles.title}>{post.title}</Text>
+              <Text style={styles.author}>
+                {formatDate(String(post.date))} - Por Professor(a){" "}
+                {post.user.username}
+              </Text>
+              {post.image && (
+                <View style={styles.imageContainer}>
+                  <Image
+                    style={styles.image}
+                    source={{ uri: post.image }}
+                    onError={(e) =>
+                      console.log(
+                        `Erro ao carregar imagem: ${e.nativeEvent.error}`
+                      )
+                    }
+                  />
+                </View>
               )}
-              <Button
-                icon="arrow-back-circle"
-                styleType="primary"
-                title="Voltar"
-                onPress={() => router.back()}
-              ></Button>
+              <Text style={styles.content}>{post.content}</Text>
+              <View style={styles.actionBar}>
+                {(user?.email === post.user.email ||
+                  user?.role === "admin") && (
+                  <Button
+                    styleType="secondary"
+                    title="Editar postagem"
+                    icon="create"
+                    onPress={() =>
+                      router.push(`/home/edit-post?postId=${post.id}`)
+                    }
+                  ></Button>
+                )}
+                <Button
+                  icon="arrow-back-circle"
+                  styleType="primary"
+                  title="Voltar"
+                  onPress={() => {
+                    previousTab ? router.push(previousTab) : router.back();
+                  }}
+                ></Button>
+              </View>
             </View>
-          </View>
+          )
         )}
       </ScrollView>
     </View>
