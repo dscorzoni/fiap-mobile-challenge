@@ -20,6 +20,7 @@ import { Colors } from "@/constants/Colors";
 import { useHandleScroll } from "@/api/utils/handleScroll";
 import { Ionicons } from "@expo/vector-icons";
 import FeedbackMessage from "@/components/FeedbackMessage";
+import React from "react";
 
 export default function PostEdit() {
   const [post, setPost] = useState<PostData>();
@@ -52,9 +53,7 @@ export default function PostEdit() {
       setPost(response.value);
       setInitialPost(response.value);
       setImagePreview(response.value.image);
-    } else {
-      Alert.alert("Não foi possível carregar o post. Tente novamente.");
-    }
+    } 
     setLoading(false);
   };
 

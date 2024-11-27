@@ -43,9 +43,7 @@ export default function PostDetail() {
 
     if (response.success) {
       setPost(response.value);
-    } else {
-      Alert.alert("Não foi possível carregar o post", "Tente novamente.");
-    }
+    } 
     setLoading(false);
   };
 
