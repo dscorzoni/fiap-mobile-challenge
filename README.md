@@ -1,50 +1,69 @@
-# Welcome to your Expo app 👋
+<h1 align="center">FIAP - Mobile Challenge</h1>
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+<p align="center">
+  <a><img src="https://img.shields.io/badge/React Native-v18.2.0-blue?logo=react"/></a>
+  <a><img src="https://img.shields.io/badge/React Navigation-v6.0.2-red?logo=react"/></a>
+  <a><img src="https://img.shields.io/badge/Expo-v51.0.28-green?logo=expo"/></a>
+  <a><img src="https://img.shields.io/badge/React Dom-v18.2.0-blue"/></a>
+  <a><img src="https://img.shields.io/badge/Axios-v1.7.7-orange?logo=axios"/></a>
+  <a><img src="https://img.shields.io/badge/Typescript-v5.3.3-blue?logo=typescript"/></a>
+</p>
 
-## Get started
+## Objetivo do trabalho
 
-1. Install dependencies
+Após o sucesso do desenvolvimento da aplicação de blogging dinâmico
+com a implementação do back-end em Node.js e o front-end utilizando React,
+chegou a hora de criarmos uma interface gráfica mobile robusta, intuitiva e
+eficiente para esta aplicação. Esta atividade focará em desenvolver o front-end
+mobile utilizando React Native, proporcionando uma experiência de usuário
+excelente tanto para docentes quanto para estudantes.
 
-   ```bash
-   npm install
-   ```
+## Backend
 
-2. Start the app
+Para rodar esta solução, é preciso primeiro rodar o backend que está em outro repositório do github, mas já containerizado. Para isso, rode no terminal:
 
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```sh
+git clone https://github.com/ammtsz/fiap-challenge-backend.git
+cd fiap-challenge-backend
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Antes de rodar o container com o docker compose, configure um arquivo .env com as variáveis de ambiente conforme sugerido no [repositório do backend](https://github.com/ammtsz/fiap-challenge-backend), ou como o exemplo abaixo:
 
-## Learn more
+```env
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_USER=docker
+POSTGRES_PASSWORD=docker
+POSTGRES_DB=challenge
+JWT_SECRET=mysecret
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+Por fim, subir a aplicação utilizando docker:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```sh
+docker compose up
+```
 
-## Join the community
+Após esse procedimento, você terá rodando em localhost:
+* Instância do PostgreSQL na porta 5432.
+* Instância do backend (API) na porta 3000.
 
-Join our community of developers creating universal apps.
+## Mobile
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Em seguida, para o mobile, abra uma nova instância do terminal e rode:
+```sh
+git clone https://github.com/dscorzoni/fiap-mobile-challenge.git
+cd fiap-mobile-challenge
+npm install
+npm run start
+
+Caso esteja rodando em um emulador Android pressione 'a' para selecionar a instância do emulador.
+Caso esteja rodando em um emulador de IOS como XCode pressione 'r' para selecionar a instância do emulador.
+```
+
+Desta forma, o mobile pode ser acessado via emulador Android Studio, XCode ou dispositivo físico.
+
+# Como utilizar a aplicação e Documentação
+
+Logo na tela principal, clique em **"Registre-se"** para criar um usuário. Usuários do tipo ADMIN ou PROFESSOR podem criar/editar posts. Usuários do tipo ALUNO podem apenas visualizar posts. Para a documentação completa, com passo-a-passo para todos os procedimentos, [acesse aqui](https://beryl-sushi-951.notion.site/Documenta-o-Tech-Challenge-Fase-4-144eb6993b4a80508967cb67200b6311).
